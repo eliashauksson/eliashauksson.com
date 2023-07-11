@@ -1,2 +1,7 @@
 *~
 *#
+
+.lein-repl-history
+.nrepl-port
+
+target/
