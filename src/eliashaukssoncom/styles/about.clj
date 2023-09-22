@@ -1,6 +1,7 @@
 (ns eliashaukssoncom.styles.about
   (:require [garden.core :refer [css]]
             [garden.units :refer [px vh vw]]
+            [garden.color :refer [rgb]]
             [garden.stylesheet :refer [at-media]]
             [eliashaukssoncom.styles.colors :refer :all]))
 
@@ -31,9 +32,11 @@
          :font-size (px 20)
          :margin-bottom (px 20)}]
     [:a {:text-decoration "none"
-         :color fg-color
          :font-size (px 40)
-         :padding (px 20)}]]
+         :padding (px 20)}
+     [:.fa-github {:color (rgb 31 35 40)}]
+     [:.fa-linkedin {:color (rgb 10 102 194)}]
+     [:.fa-strava {:color (rgb 252 82 0)}]]]
    (at-media {:screen true
               :max-width (px 1000)
               :min-width (px 801)}
