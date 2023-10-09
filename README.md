@@ -1,3 +1,3 @@
 # Personal Website
 
-Please visit <http://eliashauksson.com>.
+Visit http://www.eliashauksson.com for more.
