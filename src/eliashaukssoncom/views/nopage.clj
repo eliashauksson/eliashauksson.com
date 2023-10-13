@@ -6,4 +6,4 @@
    [:h1 "Page not found!"]])
 
 (defn nopage-page []
-  (base nopage-content))
+  (base (nopage-content)))

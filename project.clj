@@ -6,6 +6,8 @@
                  [compojure "1.7.0"]
                  [hiccup "2.0.0-RC1"]
                  [garden "1.3.10"]
-                 [markdown-to-hiccup "0.6.2"]]
+                 [markdown-to-hiccup "0.6.2"]
+                 [cheshire "5.12.0"]]
   :paths ["src" "resources"]
-  :main ^:skip-aot eliashaukssoncom.core)
+  :main eliashaukssoncom.core
+  :aot [eliashaukssoncom.core])

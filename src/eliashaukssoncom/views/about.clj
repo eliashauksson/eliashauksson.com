@@ -18,4 +18,4 @@
       [:i {:class "fa-brands fa-strava"}]]]]])
 
 (defn about-page []
-  (base about-content))
+  (base (about-content)))

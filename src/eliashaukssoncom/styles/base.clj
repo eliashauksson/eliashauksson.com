@@ -14,7 +14,7 @@
           :justify-content "space-between"
           :align-items "center"
           :min-height (vh 8)
-          :background-color hi-color}]
+          :background-color blue-color}]
    [:.logo {:padding-left (px 30)
             :letter-spacing (px 3)
             :font-size (px 26)}
@@ -43,7 +43,7 @@
                            :right (px 0)
                            :height (vh 92)
                            :top (vh 8)
-                           :background-color hi-color
+                           :background-color blue-color
                            :display "flex"
                            :flex-direction "column"
                            :justify-content "space-around"

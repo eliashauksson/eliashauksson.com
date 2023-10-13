@@ -2,7 +2,8 @@
   (:require [clojure.string :refer [join]]
             [hiccup.page :refer [html5]]
             [eliashaukssoncom.styles.base :refer [base-style]]
-            [eliashaukssoncom.styles.about :refer [about-style]]))
+            [eliashaukssoncom.styles.about :refer [about-style]]
+            [eliashaukssoncom.styles.blog :refer [blog-style]]))
 
 (def toggle-script
   (join "\n"
@@ -45,12 +46,13 @@
     [:link {:rel "preconnect"
             :href "https://fonts.gstatic.com"}]
     [:link {:rel "stylesheet"
-            :href "https://fontsgoogleapis.com/css2?family=Montserrat&display=swap"}]
+            :href "https://fonts.googleapis.com/css2?family=Montserrat&display=swap"}]
     [:link {:rel "icon"
             :type "image/png"
             :href "images/favicon.png"}]
     [:style base-style]
     [:style about-style]
+    [:style blog-style]
     [:script {:crossorigin "anonymous"
               :src "https://kit.fontawesome.com/2c8cb2c49d.js"}]]
    [:body
@@ -58,10 +60,11 @@
      [:div.logo
       [:h4 [:a {:href "/"} "Elías Hauksson"]]]
      [:ul.nav-links
-      [:li [:a {:href "/about"} "About"]]]
+      [:li [:a {:href "/about"} "About"]]
+      [:li [:a {:href "/blog"} "Blog"]]]
      [:div.burger
       [:div.line1]
       [:div.line2]
       [:div.line3]]]
-    (content)
+    content
     [:script toggle-script]]))

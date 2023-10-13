@@ -10,6 +10,7 @@
    [:.about-content {:display "flex"
                      :justify-content "center"
                      :align-items "center"
+                     :background-color bg-color
                      :height (vh 92)}]
    [:.profile-img {:width (px 600)
                    :height "auto"
