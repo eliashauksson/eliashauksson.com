@@ -38,8 +38,9 @@
            :margin (px 5)
            :transition "all 0.3s ease"}]]
    (at-media {:screen true :max-width (px 800)}
-             [:body {:overflow-x "hidden"}]
+             [:body {:overflow-x "hidden !important"}]
              [:.nav-links {:position "absolute"
+                           :z-index 10
                            :right (px 0)
                            :height (vh 92)
                            :top (vh 8)

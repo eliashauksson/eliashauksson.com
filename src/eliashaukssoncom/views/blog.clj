@@ -27,7 +27,10 @@
    [:div.blog-post-cards-list
     (let [json-str (slurp "resources/public/markdown/posts/all-posts.json")
           posts (json/parse-string json-str true)]
-      (map blog-card (reverse posts)))]])
+      (if (empty? posts)
+        [:div.blog-post-no-posts
+         [:h2.blog-post-no-posts-text "No articles found! Come back later for more."]]
+        (map blog-card (reverse posts))))]])
 
 (defn render-post [name]
   [:div.blog-content

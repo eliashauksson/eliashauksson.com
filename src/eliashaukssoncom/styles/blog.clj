@@ -36,6 +36,12 @@
                            :height (vh 80)
                            :padding (px 80)}]
    [:.blog-post-not-found-text {:font-size (px 40)}]
+   [:.blog-post-no-posts {:display "flex"
+                          :align-items "center"
+                          :justify-content "center"
+                          :height (vh 80)
+                          :padding (px 80)}]
+   [:.blog-posts-no-posts-text {:font-size (px 40)}]
    [:.blog-post-cards-list {:max-width (px 1000)
                             :width (vw 80)
                             :margin "0 50px"
@@ -67,4 +73,10 @@
     [:span {:display "flex"
             :align-items "center"}
      [:i.fa {:color fg-color
-             :margin-right (px 8)}]]]))
+             :margin-right (px 8)}]]]
+   (at-media {:screen true
+              :max-width (px 800)}
+             [:.blog-post-card {:flex-direction "column"
+                                :height (px 500)}]
+             [:.blog-post-card-image {:width (percent 100)
+                                      :height (percent 100)}])))
