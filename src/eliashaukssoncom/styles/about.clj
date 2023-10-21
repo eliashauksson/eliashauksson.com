@@ -11,7 +11,7 @@
                      :justify-content "center"
                      :align-items "center"
                      :background-color bg-color
-                     :height (vh 92)}]
+                     :min-height (vh 92)}]
    [:.profile-img {:width (px 600)
                    :height "auto"
                    :max-height (px 600)
@@ -44,7 +44,7 @@
              [:.profile-img {:width (px 400)}])
    (at-media {:screen true
               :max-width (px 800)}
-             [:.profile-img {:width (vw 90)
+             [:.profile-img {:width (vw 80)
                              :max-width (px 600)
                              :margin-top (px 30)
                              :margin-bottom (px 40)}]

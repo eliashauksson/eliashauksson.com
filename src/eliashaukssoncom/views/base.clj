@@ -32,7 +32,7 @@
             :content "Elías Hauksson"}]
     [:meta {:charset "utf-8"}]
     [:meta {:name "viewport"
-            :content "width=device-width, initial-scale=1"}]
+            :content "width=device-width, initial-scale=1, minimum-scale=1"}]
     [:meta {:property "og:title"
             :content "Elías Hauksson"}]
     [:meta {:property "og:type"
@@ -41,20 +41,19 @@
             :content "https://eliashauksson.com"}]
     [:meta {:property "og:description"
             :content "Personal Website of Elías Hauksson."}]
-    [:link {:rel "preconnect"
-            :href "https://fonts.googleapis.com"}]
-    [:link {:rel "preconnect"
-            :href "https://fonts.gstatic.com"}]
-    [:link {:rel "stylesheet"
-            :href "https://fonts.googleapis.com/css2?family=Montserrat&display=swap"}]
     [:link {:rel "icon"
             :type "image/png"
-            :href "images/favicon.png"}]
+            :href "/images/favicon.png"}]
+    [:link {:rel "stylesheet"
+            :href "/javascript/highlight-js/styles/github.min.css"}]
+    [:script {:src "/javascript/highlight-js/highlight.min.js"}]
+    [:script "hljs.highlightAll();"]
+    [:style "@font-face {font-family: serif;src: url(\"fonts/Playfairdisplay-Regular.ttf\")}"]
     [:style base-style]
     [:style about-style]
     [:style blog-style]
     [:script {:crossorigin "anonymous"
-              :src "https://kit.fontawesome.com/2c8cb2c49d.js"}]]
+              :src "https://kit.fontawesome.com/7d095e3100.js"}]]
    [:body
     [:nav
      [:div.logo

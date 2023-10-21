@@ -1,6 +1,6 @@
 (ns eliashaukssoncom.styles.base
   (:require [garden.core :refer [css]]
-            [garden.units :refer [px vh percent]]
+            [garden.units :refer [px vh vw percent]]
             [garden.stylesheet :refer [at-media at-keyframes]]
             [eliashaukssoncom.styles.colors :refer :all]))
 
@@ -9,7 +9,10 @@
    [:* {:margin (px 0)
         :padding (px 0)
         :box-sizing "border-box"
-        :font-family "'Montserrat', sans-serif"}]
+        :font-family "'PlayfairDisplay', serif"}]
+   [:body {:overflow-x "hidden"
+           :overflow-y "scroll !important"
+           :background-color bg-color}]
    [:nav {:display "flex"
           :justify-content "space-between"
           :align-items "center"
@@ -38,7 +41,6 @@
            :margin (px 5)
            :transition "all 0.3s ease"}]]
    (at-media {:screen true :max-width (px 800)}
-             [:body {:overflow-x "hidden !important"}]
              [:.nav-links {:position "absolute"
                            :z-index 10
                            :right (px 0)

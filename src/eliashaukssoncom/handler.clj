@@ -1,6 +1,8 @@
 (ns eliashaukssoncom.handler
   (:require [ring.util.response :refer [redirect]]
             [ring.middleware.resource :refer [wrap-resource]]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [clojure.java.io :as io]
             [compojure.core :refer [defroutes GET]]
             [compojure.route :refer [not-found]]
             [eliashaukssoncom.views.about :refer [about-page]]
@@ -16,4 +18,5 @@
 
 (def app
   (-> routes
+      (wrap-content-type)
       (wrap-resource "public")))

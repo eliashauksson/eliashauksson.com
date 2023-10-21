@@ -1,29 +1,2 @@
 [
-    {
-        "id": "0",
-        "title": "Test article #01",
-        "description": "This article is just a place-filler for development.",
-        "image": "images/mountain.jpg",
-        "date": "10 Oct 2023",
-        "author": "Elías Hauksson",
-        "location": "markdown/posts/test-post01.md"
-    },
-    {
-        "id": "1",
-        "title": "Test article #02",
-        "description": "This article is just a place-filler for development.",
-        "image": "images/forest.jpg",
-        "date": "11 Oct 2023",
-        "author": "Elías Hauksson",
-        "location": "markdown/posts/test-post02.md"
-    },
-    {
-        "id": "2",
-        "title": "Test article #03",
-        "description": "This article is just a place-filler for development.",
-        "image": "images/mountain.jpg",
-        "date": "12 Oct 2023",
-        "author": "Elías Hauksson",
-        "location": "markdown/posts/test-post03.md"
-    }
 ]

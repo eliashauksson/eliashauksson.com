@@ -15,21 +15,28 @@
                     :color fg-color
                     :min-height (vh 92)}]
    [:.blog-post {:max-width (px 1000)
-                 :margin-top (px 20)
-                 :padding (px 30)}]
+                 :padding (px 30)
+                 :margin-top (px 30)}]
    [:.blog-post-content
-    [:h1 {:font-size (px 60)
+    [:h1 {:font-size (px 45)
           :margin-bottom (px 30)
-          :margin-top (px 30)}]
+          :margin-top (px 10)}]
+    [:h2 {:font-size (px 30)
+          :margin-bottom (px 20)
+          :margin-top (px 20)}]
     [:p {:font-size (px 20)}]]
    [:.blog-post-back-button {:text-decoration "none"
                              :color bg-color
                              :background-color blue-color
-                             :padding (px 10)
+                             :padding (px 12)
                              :font-weight "bold"
                              :font-size (px 20)
                              :border-color blue-color
                              :border-radius (px 8)}]
+   [:.blog-post-details {:width (percent 100)
+                         :margin-top (px 50)}]
+   [:.blog-post-details-text {:font-size (px 20)
+                              :color blue-color}]
    [:.blog-post-not-found {:display "flex"
                            :align-items "center"
                            :justify-content "center"
