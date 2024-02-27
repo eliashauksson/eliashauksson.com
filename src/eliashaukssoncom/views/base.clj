@@ -60,7 +60,8 @@
       [:h4 [:a {:href "/"} "Elías Hauksson"]]]
      [:ul.nav-links
       [:li [:a {:href "/about"} "About"]]
-      [:li [:a {:href "/blog"} "Blog"]]]
+      [:li [:a {:href "/blog"} "Blog"]]
+      [:li [:a {:href "/CV"} "CV"]]]
      [:div.burger
       [:div.line1]
       [:div.line2]

@@ -1,5 +1,5 @@
 (ns eliashaukssoncom.handler
-  (:require [ring.util.response :refer [redirect]]
+  (:require [ring.util.response :refer [redirect file-response]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [clojure.java.io :as io]
@@ -14,6 +14,7 @@
   (GET "/about" [] (about-page))
   (GET "/blog" [] (blog-page))
   (GET "/blog/:post-name" [post-name] (blog-post post-name))
+  (GET "/CV" [] (file-response "pdf/CV.pdf" {:root "resources/public"}))
   (not-found (nopage-page)))
 
 (def app

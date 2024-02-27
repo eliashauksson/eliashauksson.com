@@ -15,8 +15,7 @@
                     :color fg-color
                     :min-height (vh 92)}]
    [:.blog-post {:max-width (px 1000)
-                 :padding (px 30)
-                 :margin-top (px 30)}]
+                 :margin (px 50)}]
    [:.blog-post-content
     [:h1 {:font-size (px 45)
           :margin-bottom (px 30)
@@ -24,7 +23,9 @@
     [:h2 {:font-size (px 30)
           :margin-bottom (px 20)
           :margin-top (px 20)}]
-    [:p {:font-size (px 20)}]]
+    [:p {:font-size (px 20)}]
+    [:code {:margin-bottom (px 20)
+            :margin-top (px 20)}]]
    [:.blog-post-back-button {:text-decoration "none"
                              :color bg-color
                              :background-color blue-color
