@@ -23,7 +23,13 @@
     [:h2 {:font-size (px 30)
           :margin-bottom (px 20)
           :margin-top (px 20)}]
-    [:p {:font-size (px 20)}]
+    [:p {:font-size (px 20)
+         :margin-bottom (px 20)
+         :line-height (px 26)}]
+    [:img {:width (percent 80)
+           :margin-left (percent 10)
+           :margin-top (px 30)
+           :margin-bottom (px 30)}]
     [:code {:margin-bottom (px 20)
             :margin-top (px 20)}]]
    [:.blog-post-back-button {:text-decoration "none"

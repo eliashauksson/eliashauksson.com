@@ -1,2 +1,11 @@
 [
+    {
+        "id": "0",
+        "title": "Skitouring Weekend in the Jungfrau Region",
+        "description": "A 3 day ski trip in the jungfrau region",
+        "image": "images/post0/post0_day3_finsteraarhorn_morning.jpg",
+        "date": "25 Apr 2024",
+        "author": "Elías",
+        "location": "markdown/posts/skitour-jungfrauregion-04-2024.md"
+    }
 ]
