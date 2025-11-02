@@ -1,0 +1,849 @@
+/* Navbar - center logo using flex; keep light minimal style */
+:root {
+  --bg: #ffffff;
+  --text: #1f2937;
+}
+
+/* Global typography to match navbar font across all pages */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+  padding: 24px 0;
+}
+
+.navbar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 24px; /* ensure a visible gap between logo and links */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 20px;
+}
+
+/* nav lists */
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* right-side nav container */
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* let links area fill the right side */
+  justify-content: flex-end; /* align links to the right edge */
+}
+
+
+/* left-aligned logo fills left side */
+.logo {
+  position: static;
+  margin: 0;
+  flex: 1 1 auto; /* let logo area fill remaining left space */
+}
+
+.logo a {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 3px;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+/* link styles and underline animation */
+.navbar a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 6px 6px; /* increases clickable area */
+  transition: color 0.2s ease;
+}
+
+.navbar a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .navbar-inner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  /* make nav lists centered under logo on small screens */
+  .nav-left, .nav-right {
+    flex: initial;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar ul { gap: 18px; }
+  .logo { position: static; transform: none; order: 0; }
+}
+
+
+/* Error pages - centered content with navbar-like styling */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.error-page {
+  min-height: calc(100vh - 140px); /* leave space for navbar/footer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  row-gap: 8px;
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.error-page h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.error-page p {
+  margin: 0 0 8px;
+}
+
+/* Reuse navbar-style underline for links on error pages */
+.error-page a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 6px 6px;
+  transition: color 0.2s ease;
+}
+
+.error-page a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.error-page a:hover::after,
+.error-page a:focus-visible::after {
+  width: 100%;
+}
+
+/* Home page hero and transparent navbar */
+.home-page .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.home-page .navbar a,
+.home-page .logo a {
+  color: #ffffff;
+}
+
+.home-page .navbar a::after {
+  background: rgba(255,255,255,0.9);
+}
+
+/* Let the hero go edge-to-edge on home */
+.home-page main.container {
+  max-width: none;
+  padding: 0;
+}
+
+.home-hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-image: url('/static/img/mountain_in_the_morning.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35));
+}
+
+.home-hero__content {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  text-align: center;
+  padding: 0 20px;
+  max-width: 960px; /* match navbar width for wrapping */
+  margin: 0 auto; /* center content within the hero */
+}
+
+.home-hero .intro {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Lower-right caption for the hero image */
+.home-hero__caption {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #ffffff;
+  background: rgba(0,0,0,0.35);
+  padding: 6px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(1px);
+}
+
+@media (max-width: 700px) {
+  .home-hero .intro { font-size: 20px; }
+}
+
+
+/* About page */
+.about {}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.about__portrait {
+  margin: 0;
+}
+
+.about__portrait img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.about__text h1 {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.about__text p {
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+  .about__portrait {
+    max-width: 260px;
+    justify-self: center;
+  }
+}
+
+/* About page — header and meta styles to be closer to the reference layout */
+.about {
+  padding-top: 16px;
+}
+
+.about__header {
+  margin: 0 0 24px 0;
+}
+
+.about__title {
+  margin: 0 0 6px 0;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.about__subtitle {
+  margin: 0;
+  color: #6b7280; /* muted gray */
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+.about__meta {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 8px;
+}
+
+.about__meta li {
+  margin: 0;
+}
+
+.about__meta a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 2px 0;
+}
+
+.about__meta a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.about__meta a:hover::after,
+.about__meta a:focus-visible::after {
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .about__title { font-size: 40px; }
+  .about__grid { gap: 40px; grid-template-columns: 340px 1fr; }
+}
+
+/* Navbar - center logo using flex; keep light minimal style */
+:root {
+  --bg: #ffffff;
+  --text: #1f2937;
+}
+
+/* Global typography to match navbar font across all pages */
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+  padding: 24px 0;
+}
+
+.navbar-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 24px; /* ensure a visible gap between logo and links */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 20px;
+}
+
+/* nav lists */
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  padding: 0;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* right-side nav container */
+.nav-right {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* let links area fill the right side */
+  justify-content: flex-end; /* align links to the right edge */
+}
+
+
+/* left-aligned logo fills left side */
+.logo {
+  position: static;
+  margin: 0;
+  flex: 1 1 auto; /* let logo area fill remaining left space */
+}
+
+.logo a {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 3px;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+/* link styles and underline animation */
+.navbar a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 6px 6px; /* increases clickable area */
+  transition: color 0.2s ease;
+}
+
+.navbar a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.navbar a:hover::after,
+.navbar a.active::after {
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .navbar-inner {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  /* make nav lists centered under logo on small screens */
+  .nav-left, .nav-right {
+    flex: initial;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .navbar ul { gap: 18px; }
+  .logo { position: static; transform: none; order: 0; }
+}
+
+
+/* Error pages - centered content with navbar-like styling */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+.error-page {
+  min-height: calc(100vh - 140px); /* leave space for navbar/footer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  row-gap: 8px;
+  color: var(--text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.error-page h1 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.error-page p {
+  margin: 0 0 8px;
+}
+
+/* Reuse navbar-style underline for links on error pages */
+.error-page a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 6px 6px;
+  transition: color 0.2s ease;
+}
+
+.error-page a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.error-page a:hover::after,
+.error-page a:focus-visible::after {
+  width: 100%;
+}
+
+/* Home page hero and transparent navbar */
+.home-page .navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.home-page .navbar a,
+.home-page .logo a {
+  color: #ffffff;
+}
+
+.home-page .navbar a::after {
+  background: rgba(255,255,255,0.9);
+}
+
+/* Let the hero go edge-to-edge on home */
+.home-page main.container {
+  max-width: none;
+  padding: 0;
+}
+
+.home-hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-image: url('/static/img/mountain_in_the_morning.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35));
+}
+
+.home-hero__content {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  text-align: center;
+  padding: 0 20px;
+  max-width: 960px; /* match navbar width for wrapping */
+  margin: 0 auto; /* center content within the hero */
+}
+
+.home-hero .intro {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Lower-right caption for the hero image */
+.home-hero__caption {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #ffffff;
+  background: rgba(0,0,0,0.35);
+  padding: 6px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(1px);
+}
+
+@media (max-width: 700px) {
+  .home-hero .intro { font-size: 20px; }
+}
+
+
+/* About page */
+.about {}
+
+.about__grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.about__portrait {
+  margin: 0;
+}
+
+.about__portrait img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.about__text h1 {
+  margin: 0 0 12px 0;
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.about__text p {
+  margin: 0 0 12px 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 700px) {
+  .about__grid {
+    grid-template-columns: 1fr;
+  }
+  .about__portrait {
+    max-width: 260px;
+    justify-self: center;
+  }
+}
+
+/* About page — header and meta styles to be closer to the reference layout */
+.about {
+  padding-top: 16px;
+}
+
+.about__header {
+  margin: 0 0 24px 0;
+}
+
+.about__title {
+  margin: 0 0 6px 0;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.about__subtitle {
+  margin: 0;
+  color: #6b7280; /* muted gray */
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+.about__meta {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 8px;
+}
+
+.about__meta li {
+  margin: 0;
+}
+
+.about__meta a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 2px 0;
+}
+
+.about__meta a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.about__meta a:hover::after,
+.about__meta a:focus-visible::after {
+  width: 100%;
+}
+
+@media (min-width: 900px) {
+  .about__title { font-size: 40px; }
+  .about__grid { gap: 40px; grid-template-columns: 340px 1fr; }
+}
+
+/* About page (new role-based layout) */
+.about-roles { padding-top: 48px; }
+.about-roles__header { text-align: center; margin-bottom: 24px; }
+.about-roles__title {
+  margin: 0 0 16px 0;
+  font-size: 24px; /* smaller intro title */
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.about-roles__tabs {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.about-tab {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 12px;
+  position: relative;
+  font-size: 18px; /* bigger link text */
+  font-weight: 600;
+}
+
+.about-tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 1px;
+  background: var(--text);
+  transition: width 0.28s ease;
+}
+
+.about-tab:hover::after, .about-tab.is-active::after { width: 100%; }
+
+.about-role__panel { margin-top: 24px; }
+.about-role__media { margin: 0; }
+.about-role__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.about-role__text { max-width: 70ch; margin: 16px auto 0; line-height: 1.7; }
+
+@media (min-width: 900px) {
+  .about-roles__title { font-size: 32px; }
+}
+
+
+/* Contact page */
+.contact { padding-top: 24px; }
+.contact__header { text-align: center; margin-bottom: 24px; }
+.contact__title { margin: 0 0 8px 0; font-size: 28px; line-height: 1.2; font-weight: 700; }
+.contact__subtitle { margin: 0 auto; color: #6b7280; line-height: 1.6; max-width: 60ch; }
+
+/* Center the contact content nicely */
+.contact__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto; /* center within the container */
+}
+
+/* Form styles matching the site aesthetic */
+.form-row { display: grid; gap: 8px; margin-bottom: 14px; }
+.form-row label { font-weight: 600; letter-spacing: 0.2px; }
+.form-row input,
+.form-row textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-row input:focus,
+.form-row textarea:focus { outline: none; border-color: #9ca3af; box-shadow: 0 0 0 3px rgba(31,41,55,0.1); }
+
+.form-actions { margin-top: 4px; }
+.btn {
+  appearance: none;
+  border: none;
+  background: var(--text);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(0.95); }
+.btn:active { transform: translateY(1px); }
+
+/* Alerts */
+.alert { padding: 12px 14px; border-radius: 8px; margin-bottom: 12px; }
+.alert--success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+.alert--error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+/* Socials */
+.contact__socials { text-align: center; }
+.contact__socials ul { list-style: none; padding: 0; margin: 0; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.contact__socials a { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; padding: 6px 8px; position: relative; }
+.contact__socials a::after { content: ""; position: absolute; left: 0; bottom: -4px; width: 0%; height: 1px; background: var(--text); transition: width 0.28s ease; }
+.contact__socials a:hover::after, .contact__socials a:focus-visible::after { width: 100%; }
+.contact__socials-note { color: #6b7280; margin-top: 4px; }
+
+@media (min-width: 900px) {
+  /* Keep stacked layout on wide screens as requested */
+  .contact__grid { grid-template-columns: 1fr; align-items: start; }
+}

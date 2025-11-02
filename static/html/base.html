@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elías Hauksson - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{% if request.path.startswith('/home') %}home-page{% endif %}">
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="logo">
+      <a href="/home">Elías Hauksson</a>
+    </div>
+
+    <ul class="nav-right">
+      <li><a href="/home" class="{% if request.path.startswith('/home') %}active{% endif %}">Home</a></li>
+      <li><a href="/about" class="{% if request.path.startswith('/about') %}active{% endif %}">About</a></li>
+      <li><a href="/contact" class="{% if request.path.startswith('/contact') %}active{% endif %}">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="container">
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<section class="about-roles" data-default-role="engineer">
+  <header class="about-roles__header">
+    <h1 class="about-roles__title">Hi I'm Elías,<br />I’m an electrical engineering student who enjoys building things that work in the real world — from embedded systems to power electronics</h1>
+    <nav class="about-roles__tabs" aria-label="About sections" role="tablist">
+      <a href="#" id="tab-engineer" class="about-tab is-active" data-role="engineer" role="tab" aria-selected="true" aria-controls="panel-engineer">Engineer</a>
+      <a href="#" id="tab-athlete" class="about-tab" data-role="athlete" role="tab" aria-selected="false" aria-controls="panel-athlete">Athlete</a>
+      <a href="#" id="tab-soldier" class="about-tab" data-role="soldier" role="tab" aria-selected="false" aria-controls="panel-soldier">Soldier</a>
+    </nav>
+  </header>
+
+  <!-- Role panels: edit text and images directly here -->
+  <div class="about-role__panel" id="panel-engineer" role="tabpanel" aria-labelledby="tab-engineer">
+    <div class="about-role__text">
+      {{ about_engineer|safe }}
+    </div>
+  </div>
+
+  <div class="about-role__panel" id="panel-athlete" role="tabpanel" aria-labelledby="tab-athlete" hidden aria-hidden="true">
+    <div class="about-role__text">
+      {{ about_athlete|safe }}
+    </div>
+  </div>
+
+  <div class="about-role__panel" id="panel-soldier" role="tabpanel" aria-labelledby="tab-soldier" hidden aria-hidden="true">
+    <div class="about-role__text">
+      {{ about_soldier|safe }}
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const tabs = document.querySelectorAll('.about-tab');
+      const panels = {
+        engineer: document.getElementById('panel-engineer'),
+        athlete: document.getElementById('panel-athlete'),
+        soldier: document.getElementById('panel-soldier'),
+      };
+
+      function setActive(role) {
+        // Toggle tab state
+        tabs.forEach(t => {
+          const isActive = t.dataset.role === role;
+          t.classList.toggle('is-active', isActive);
+          t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          t.tabIndex = isActive ? 0 : -1;
+        });
+
+        // Toggle panels
+        Object.entries(panels).forEach(([key, panel]) => {
+          const show = key === role;
+          if (show) {
+            panel.removeAttribute('hidden');
+            panel.setAttribute('aria-hidden', 'false');
+          } else {
+            panel.setAttribute('hidden', '');
+            panel.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
+          setActive(this.dataset.role);
+        });
+        tab.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setActive(this.dataset.role);
+          }
+        });
+      });
+    })();
+  </script>
+</section>
+{% endblock %}

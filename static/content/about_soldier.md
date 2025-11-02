@@ -1,0 +1,7 @@
+In summer 2025, I began my military service at the Rettungsschule 75 as a Rettungssoldat (rescue soldier). Our work focused on technical rescue operations - setting up long-distance water transports for firefighting, clearing debris, cutting through concrete and steel, and safely rescuing injured people from collapsed structures. We also trained in first aid and tactical response, learning to stay calm and make decisions under pressure.
+
+Beyond the technical skills, military life taught me a lot about teamwork, endurance, and discipline - how to perform when you're cold, tired, or under stress, and still keep people safe.
+
+I'm now continuing my training at the Unteroffizierschule (Non-Commissioned Officer School), preparing to become a Wachtmeister (Sergeant). This phase focuses on leadership, learning how to guide small teams effectively in demanding environments. Looking ahead, I plan to attend the Offiziersschule (Officer School) to become a Leutnant (Lieutenant), where I'll take on larger responsibilities and refine my ability to lead with structure and confidence.
+
+For me, the military isn't just about tactics - it's a way to develop resilience, leadership, and composure, qualities I aim to carry into my professional work and everyday life.
