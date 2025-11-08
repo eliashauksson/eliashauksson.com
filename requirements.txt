@@ -1,0 +1,3 @@
+Flask>=2.2,<3.0
+# WSGI server
+gunicorn>=21.2,<22.0

@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1bbfe21b-3d70-44e0-906a-65f36e17b995" name="Changes" comment="Add multi-page structure with templates, global styles, and error pages&#10;&#10;- Implemented `home`, `about`, `portfolio`, `blog`, and `contact` routes.&#10;- Created corresponding HTML templates with a shared base layout.&#10;- Designed responsive CSS for a clean, modern UI.&#10;- Added custom 404 and 500 error pages.&#10;- Included a contextual processor for dynamic year display in the footer." />
+    <list default="true" id="1bbfe21b-3d70-44e0-906a-65f36e17b995" name="Changes" comment="**Add initial personal website setup**  &#10;&#10;- Structured Flask application with an application factory (`create_app`) and error handlers.  &#10;- Added static HTML templates (`home`, `about`, `contact`, `projects`, error pages).  &#10;- Integrated a basic Markdown renderer for dynamic content in the &quot;About&quot; section.  &#10;- Implemented contact form submission with SMTP email sending.  &#10;- Designed responsive styling for pages with a minimal CSS file.  &#10;- Established navigation structure and reusable base template for consistency.">
+      <change afterPath="$PROJECT_DIR$/README_DEPLOY.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deploy/setup.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,11 +69,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHELLCHECK.PATH": "/home/eliash/.var/app/com.jetbrains.PyCharm-Professional/data/JetBrains/PyCharm2025.2/Shell Script/shellcheck",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "master",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "/home/eliash/Projects/eliashaukssoncom/static/img",
+    "last_opened_file_path": "/home/eliash/Projects/eliashaukssoncom",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -151,7 +157,8 @@
       <workItem from="1762025793992" duration="3644000" />
       <workItem from="1762082070490" duration="292000" />
       <workItem from="1762082376688" duration="60000" />
-      <workItem from="1762082451307" duration="15386000" />
+      <workItem from="1762082451307" duration="15657000" />
+      <workItem from="1762602580138" duration="1112000" />
     </task>
     <task id="LOCAL-00001" summary="initial setup">
       <option name="closed" value="true" />
@@ -169,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762030296234</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="**Add initial personal website setup**  &#10;&#10;- Structured Flask application with an application factory (`create_app`) and error handlers.  &#10;- Added static HTML templates (`home`, `about`, `contact`, `projects`, error pages).  &#10;- Integrated a basic Markdown renderer for dynamic content in the &quot;About&quot; section.  &#10;- Implemented contact form submission with SMTP email sending.  &#10;- Designed responsive styling for pages with a minimal CSS file.  &#10;- Established navigation structure and reusable base template for consistency.">
+      <option name="closed" value="true" />
+      <created>1762117837910</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1762117837910</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,10 +204,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="initial setup" />
     <MESSAGE value="Add multi-page structure with templates, global styles, and error pages&#10;&#10;- Implemented `home`, `about`, `portfolio`, `blog`, and `contact` routes.&#10;- Created corresponding HTML templates with a shared base layout.&#10;- Designed responsive CSS for a clean, modern UI.&#10;- Added custom 404 and 500 error pages.&#10;- Included a contextual processor for dynamic year display in the footer." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add multi-page structure with templates, global styles, and error pages&#10;&#10;- Implemented `home`, `about`, `portfolio`, `blog`, and `contact` routes.&#10;- Created corresponding HTML templates with a shared base layout.&#10;- Designed responsive CSS for a clean, modern UI.&#10;- Added custom 404 and 500 error pages.&#10;- Included a contextual processor for dynamic year display in the footer." />
+    <MESSAGE value="**Add initial personal website setup**  &#10;&#10;- Structured Flask application with an application factory (`create_app`) and error handlers.  &#10;- Added static HTML templates (`home`, `about`, `contact`, `projects`, error pages).  &#10;- Integrated a basic Markdown renderer for dynamic content in the &quot;About&quot; section.  &#10;- Implemented contact form submission with SMTP email sending.  &#10;- Designed responsive styling for pages with a minimal CSS file.  &#10;- Established navigation structure and reusable base template for consistency." />
+    <option name="LAST_COMMIT_MESSAGE" value="**Add initial personal website setup**  &#10;&#10;- Structured Flask application with an application factory (`create_app`) and error handlers.  &#10;- Added static HTML templates (`home`, `about`, `contact`, `projects`, error pages).  &#10;- Integrated a basic Markdown renderer for dynamic content in the &quot;About&quot; section.  &#10;- Implemented contact form submission with SMTP email sending.  &#10;- Designed responsive styling for pages with a minimal CSS file.  &#10;- Established navigation structure and reusable base template for consistency." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/eliashaukssoncom$eliashaukssoncom.coverage" NAME="eliashaukssoncom Coverage Results" MODIFIED="1762030193534" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/eliashaukssoncom$main.coverage" NAME="main Coverage Results" MODIFIED="1762117488552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/eliashaukssoncom$main.coverage" NAME="main Coverage Results" MODIFIED="1762117651482" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
