@@ -1,0 +1,44 @@
+{
+  "nav_home": "Home",
+  "nav_about": "About",
+  "nav_contact": "Contact",
+
+  "home_title": "Home",
+  "home_intro": "Hi there I'm Elías, an electrical engineering student.",
+  "home_caption": "On the Fieschergletscher before sunrise, captured during a ski tour - Pixel 6",
+  
+  "about_title": "About",
+  "about_intro": "Hi I'm Elías,<br />I'm an electrical engineering student who enjoys building things that work in the real world - from embedded systems to power electronics.",
+  
+  "contact_title": "Contact",
+  "contact_heading": "Get in touch",
+  "contact_subtitle": "Leave a message and I'll get back to you. You can also find me on these socials.",
+  
+  "contact_name": "Name",
+  "contact_email": "Email",
+  "contact_message": "Message",
+  "contact_button": "Send message",
+  
+  "contact_spam": "Submission flagged as spam.",
+  "contact_required": "Please fill out your name, email, and message.",
+  "contact_invalid_email": "Please provide a valid email address.",
+  "contact_status": "Your message has been sent. Thank you!",
+  "contact_send_error": "Something went wrong while sending your message.",
+  
+  "projects_title": "Projects",
+  
+  "error_403_title": "Access denied",
+  "error_403_heading": "403 - Access denied",
+  "error_403_body": "You don't have permission to view this page.",
+  "error_403_link": "Back to Home",
+  
+  "error_404_title": "Page not found",
+  "error_404_heading": "404 - Page not found",
+  "error_404_body": "Sorry, the page you were looking for doesn't exist or may have been moved.",
+  "error_404_link": "Go back home",
+  
+  "error_500_title": "Server error",
+  "error_500_heading": "500 - Something went wrong",
+  "error_500_body": "Oops! An unexpected error occurred on our side. Please try again in a moment.",
+  "error_500_link": "Return to Home"
+}

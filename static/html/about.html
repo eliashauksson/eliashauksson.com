@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}About{% endblock %}
+{% block title %}{{ text.about_title }}{% endblock %}
 
 {% block content %}
 <section class="about-page">
   <header class="about-page__header">
-    <h1 class="about-page__title">Hi I'm Elías,<br />I’m an electrical engineering student who enjoys building things that work in the real world - from embedded systems to power electronics.</h1>
+    <h1 class="about-page__title">{{ text.about_intro|safe }}</h1>
   </header>
 
   <div class="about-page__content">

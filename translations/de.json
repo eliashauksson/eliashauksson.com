@@ -1,0 +1,44 @@
+{
+  "nav_home": "Start",
+  "nav_about": "Über mich",
+  "nav_contact": "Kontakt",
+
+  "home_title": "Start",
+  "home_intro": "Hallo, ich bin Elías, Elektrotechnikstudent an der EPFL.",
+  "home_caption": "Auf dem Fieschergletscher vor Sonnenaufgang, aufgenommen während einer Skitour – Pixel 6",
+
+  "about_title": "Über mich",
+  "about_intro": "Hallo, ich bin Elías,<br />Elektrotechnikstudent an der EPFL mit Interesse an Hardwareentwicklung, Embedded Systems und Power Electronics.",
+
+  "contact_title": "Kontakt",
+  "contact_heading": "Kontakt",
+  "contact_subtitle": "Schreib mir gerne eine Nachricht – ich melde mich so bald wie möglich. Du findest mich auch auf diesen Plattformen.",
+
+  "contact_name": "Name",
+  "contact_email": "E-Mail",
+  "contact_message": "Nachricht",
+  "contact_button": "Nachricht senden",
+
+  "contact_spam": "Die Nachricht wurde als Spam erkannt.",
+  "contact_required": "Bitte fülle Name, E-Mail und Nachricht aus.",
+  "contact_invalid_email": "Bitte gib eine gültige E-Mail-Adresse ein.",
+  "contact_status": "Deine Nachricht wurde erfolgreich gesendet. Vielen Dank!",
+  "contact_send_error": "Beim Senden der Nachricht ist ein Fehler aufgetreten.",
+
+  "projects_title": "Projekte",
+
+  "error_403_title": "Zugriff verweigert",
+  "error_403_heading": "403 – Zugriff verweigert",
+  "error_403_body": "Du hast keine Berechtigung, auf diese Seite zuzugreifen.",
+  "error_403_link": "Zur Startseite",
+
+  "error_404_title": "Seite nicht gefunden",
+  "error_404_heading": "404 – Seite nicht gefunden",
+  "error_404_body": "Die gesuchte Seite wurde nicht gefunden oder wurde verschoben.",
+  "error_404_link": "Zur Startseite",
+
+  "error_500_title": "Serverfehler",
+  "error_500_heading": "500 – Etwas ist schiefgelaufen",
+  "error_500_body": "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es später erneut.",
+  "error_500_link": "Zur Startseite"
+}

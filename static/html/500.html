@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Server error{% endblock %}
+{% block title %}{{ text.error_500_title }}{% endblock %}
 
 {% block content %}
 <div class="error-page">
-  <h1>500 — Something went wrong</h1>
-  <p>Oops! An unexpected error occurred on our side. Please try again in a moment.</p>
-  <p><a href="/home">Return to Home</a></p>
+  <h1>{{ text.error_500_heading }}</h1>
+  <p>{{ text.error_500_body }}</p>
+  <p><a href="{{ localized_url('home') }}">{{ text.error_500_link }}</a></p>
 </div>
 {% endblock %}

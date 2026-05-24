@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Elías Hauksson - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="{% if request.path.startswith('/home') %}home-page{% endif %}">
+<body class="{% if current_page == 'home' %}home-page{% endif %}">
 <nav class="navbar">
   <div class="navbar-inner">
     <div class="logo">
-      <a href="/home">Elías Hauksson</a>
+      <a href="{{ localized_url('home') }}">Elías Hauksson</a>
     </div>
 
     <ul class="nav-right">
-      <li><a href="/home" class="{% if request.path.startswith('/home') %}active{% endif %}">Home</a></li>
-      <li><a href="/about" class="{% if request.path.startswith('/about') %}active{% endif %}">About</a></li>
-      <li><a href="/contact" class="{% if request.path.startswith('/contact') %}active{% endif %}">Contact</a></li>
+      <li><a href="{{ localized_url('home') }}" class="{% if current_page == 'home' %}active{% endif %}">{{ text.nav_home }}</a></li>
+      <li><a href="{{ localized_url('about') }}" class="{% if current_page == 'about' %}active{% endif %}">{{ text.nav_about }}</a></li>
+      <li><a href="{{ localized_url('contact') }}" class="{% if current_page == 'contact' %}active{% endif %}">{{ text.nav_contact }}</a></li>
+      <li class="language-switcher" aria-label="Language">
+        <a href="{{ language_switch_url('en') }}" class="{% if lang == 'en' %}active{% endif %}" hreflang="en">EN</a>
+        <span aria-hidden="true">/</span>
+        <a href="{{ language_switch_url('de') }}" class="{% if lang == 'de' %}active{% endif %}" hreflang="de">DE</a>
+      </li>
     </ul>
   </div>
 </nav>
