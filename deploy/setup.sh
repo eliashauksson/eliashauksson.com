@@ -76,7 +76,7 @@ PYTHONUNBUFFERED=1
 EOF
   mv /tmp/${APP_NAME}.env "$ENV_FILE"
   chown root:root "$ENV_FILE"
-  chmod 640 "$ENV_FILE"
+  chmod 600 "$ENV_FILE"
   echo "Created env file at $ENV_FILE. Review and edit it to configure email."
 fi
 

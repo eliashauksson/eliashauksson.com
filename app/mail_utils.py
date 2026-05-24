@@ -1,7 +1,16 @@
+import logging
 import os
 import smtplib
 from email.message import EmailMessage
 from typing import Tuple
+
+logger = logging.getLogger(__name__)
+CONFIG_ERROR = (
+    "Email is not configured on the server yet. Please try again later or contact me via socials."
+)
+SEND_ERROR = (
+    "Email could not be sent right now. Please try again later or contact me via socials."
+)
 
 
 def _bool(val: str | None, default: bool = False) -> bool:
@@ -26,7 +35,7 @@ def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str
     Returns (ok, error_message). error_message is empty on success.
     """
     server = os.getenv("MAIL_SERVER")
-    port = int(os.getenv("MAIL_PORT", "0") or 0)
+    port_raw = os.getenv("MAIL_PORT", "0") or 0
     username = os.getenv("MAIL_USERNAME")
     password = os.getenv("MAIL_PASSWORD")
     use_tls = _bool(os.getenv("MAIL_USE_TLS"), True)
@@ -34,11 +43,21 @@ def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str
     default_sender = os.getenv("MAIL_DEFAULT_SENDER") or username
     recipient = os.getenv("MAIL_RECIPIENT") or username
 
+    try:
+        port = int(port_raw)
+    except (TypeError, ValueError):
+        logger.error("Invalid MAIL_PORT value: %r", port_raw)
+        return False, CONFIG_ERROR
+
     if not server or not port or not recipient or not default_sender:
-        # Missing config; do a graceful no-op and report a friendly error
-        return False, (
-            "Email is not configured on the server yet. Please try again later or contact me via socials."
+        logger.error(
+            "Missing email configuration: server=%s port=%s recipient=%s sender=%s",
+            bool(server),
+            bool(port),
+            bool(recipient),
+            bool(default_sender),
         )
+        return False, CONFIG_ERROR
 
     subject = "New contact message from website"
 
@@ -71,5 +90,12 @@ def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str
                     smtp.login(username, password)
                 smtp.send_message(msg)
         return True, ""
-    except Exception as e:
-        return False, f"Failed to send email: {e}"
+    except smtplib.SMTPException:
+        logger.exception("SMTP error while sending contact form email")
+        return False, SEND_ERROR
+    except OSError:
+        logger.exception("Network error while sending contact form email")
+        return False, SEND_ERROR
+    except Exception:
+        logger.exception("Unexpected error while sending contact form email")
+        return False, SEND_ERROR

@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from .env import load_local_env
 
 
 def create_app() -> Flask:
@@ -10,6 +11,8 @@ def create_app() -> Flask:
     # Determine absolute paths for templates and static relative to this file
     here = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.abspath(os.path.join(here, ".."))
+    load_local_env(project_root)
+
     templates_path = os.path.join(project_root, "static", "html")
     static_path = os.path.join(project_root, "static")
 

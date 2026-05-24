@@ -33,7 +33,11 @@ Quick start
    journalctl -u eliashaukssoncom.service -f
 
 4) Configure email (optional, for the Contact form)
-   Edit /etc/eliashaukssoncom.env and fill at least the following:
+   Production secrets live outside the git repository in:
+
+   /etc/eliashaukssoncom.env
+
+   Edit that file and fill at least the following:
 
    MAIL_SERVER=smtp.example.com
    MAIL_PORT=587
@@ -43,6 +47,11 @@ Quick start
    MAIL_USE_SSL=0
    MAIL_DEFAULT_SENDER=me@example.com
    MAIL_RECIPIENT=me@example.com
+
+   Lock down the file so only root can read and write it:
+
+   sudo chown root:root /etc/eliashaukssoncom.env
+   sudo chmod 600 /etc/eliashaukssoncom.env
 
    Then restart the service:
 
@@ -62,6 +71,7 @@ Project layout notes
 Common operations
 - Restart service: sudo systemctl restart eliashaukssoncom.service
 - View logs:       journalctl -u eliashaukssoncom.service -f
+- Edit secrets:    sudoedit /etc/eliashaukssoncom.env && sudo chmod 600 /etc/eliashaukssoncom.env
 - Update code:
   git pull
   . .venv/bin/activate && pip install -r requirements.txt
