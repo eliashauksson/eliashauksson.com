@@ -728,59 +728,20 @@ body {
   .about__grid { gap: 40px; grid-template-columns: 340px 1fr; }
 }
 
-/* About page (new role-based layout) */
-.about-roles { padding-top: 48px; }
-.about-roles__header { text-align: center; margin-bottom: 24px; }
-.about-roles__title {
+/* About page */
+.about-page { padding-top: 48px; }
+.about-page__header { text-align: center; margin-bottom: 24px; }
+.about-page__title {
   margin: 0 0 16px 0;
-  font-size: 24px; /* smaller intro title */
+  font-size: 24px;
   line-height: 1.35;
   font-weight: 700;
 }
 
-.about-roles__tabs {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.about-tab {
-  color: var(--text);
-  text-decoration: none;
-  padding: 8px 12px;
-  position: relative;
-  font-size: 18px; /* bigger link text */
-  font-weight: 600;
-}
-
-.about-tab::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 0%;
-  height: 1px;
-  background: var(--text);
-  transition: width 0.28s ease;
-}
-
-.about-tab:hover::after, .about-tab.is-active::after { width: 100%; }
-
-.about-role__panel { margin-top: 24px; }
-.about-role__media { margin: 0; }
-.about-role__media img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-}
-
-.about-role__text { max-width: 70ch; margin: 16px auto 0; line-height: 1.7; }
+.about-page__content { max-width: 70ch; margin: 16px auto 0; line-height: 1.7; }
 
 @media (min-width: 900px) {
-  .about-roles__title { font-size: 32px; }
+  .about-page__title { font-size: 32px; }
 }
 
 

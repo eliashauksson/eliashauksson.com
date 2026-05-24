@@ -18,27 +18,17 @@ def home():
 
 @bp.route("/about")
 def about():
-    # Load role texts from markdown files so longer content is easy to edit.
+    # Load the unified about text from markdown so longer content stays easy to edit.
     content_dir = os.path.join(current_app.static_folder, "content")
+    path = os.path.join(content_dir, "about.md")
 
-    def load(name: str) -> str:
-        path = os.path.join(content_dir, name)
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return render_markdown(f.read())
-        except FileNotFoundError:
-            return ""
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            about_content = render_markdown(f.read())
+    except FileNotFoundError:
+        about_content = ""
 
-    about_engineer = load("about_engineer.md")
-    about_athlete = load("about_athlete.md")
-    about_soldier = load("about_soldier.md")
-
-    return render_template(
-        "about.html",
-        about_engineer=about_engineer,
-        about_athlete=about_athlete,
-        about_soldier=about_soldier,
-    )
+    return render_template("about.html", about_content=about_content)
 
 
 @bp.route("/contact", methods=["GET", "POST"])
