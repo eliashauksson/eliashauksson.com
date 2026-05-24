@@ -5,6 +5,7 @@ from email.message import EmailMessage
 from typing import Tuple
 
 logger = logging.getLogger(__name__)
+SMTP_TIMEOUT_SECONDS = 15
 CONFIG_ERROR = (
     "Email is not configured on the server yet. Please try again later or contact me via socials."
 )
@@ -59,7 +60,8 @@ def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str
         )
         return False, CONFIG_ERROR
 
-    subject = "New contact message from website"
+    safe_name = " ".join(name.split())
+    subject = f"[eliashauksson.com] Contact from {safe_name}"
 
     body = (
         f"You received a new message from the website contact form.\n\n"
@@ -72,16 +74,17 @@ def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str
     msg["From"] = default_sender
     msg["To"] = recipient
     msg["Subject"] = subject
+    msg["Reply-To"] = email
     msg.set_content(body)
 
     try:
         if use_ssl:
-            with smtplib.SMTP_SSL(server, port) as smtp:
+            with smtplib.SMTP_SSL(server, port, timeout=SMTP_TIMEOUT_SECONDS) as smtp:
                 if username and password:
                     smtp.login(username, password)
                 smtp.send_message(msg)
         else:
-            with smtplib.SMTP(server, port) as smtp:
+            with smtplib.SMTP(server, port, timeout=SMTP_TIMEOUT_SECONDS) as smtp:
                 smtp.ehlo()
                 if use_tls:
                     smtp.starttls()

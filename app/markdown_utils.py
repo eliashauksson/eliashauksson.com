@@ -1,4 +1,9 @@
+import html
 import re
+from urllib.parse import urlparse
+
+
+ALLOWED_LINK_SCHEMES = {"", "http", "https", "mailto"}
 
 
 def render_markdown(md: str) -> str:
@@ -26,13 +31,17 @@ def render_markdown(md: str) -> str:
 
     # Inline replacements
     def inline(txt: str) -> str:
-        # Escape minimal HTML
-        txt = (txt
-               .replace("&", "&amp;")
-               .replace("<", "&lt;")
-               .replace(">", "&gt;"))
-        # Links [text](url)
-        txt = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', txt)
+        txt = html.escape(txt)
+
+        def link(match):
+            label = match.group(1)
+            url = html.unescape(match.group(2)).strip()
+            parsed = urlparse(url)
+            if parsed.scheme.lower() not in ALLOWED_LINK_SCHEMES:
+                return label
+            return f'<a href="{html.escape(url, quote=True)}">{label}</a>'
+
+        txt = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, txt)
         # Bold **text**
         txt = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", txt)
         # Italic *text*

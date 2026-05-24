@@ -1,38 +1,84 @@
-Local Development
+# Local Development
 
-Setup
-1. Create and activate a virtual environment:
+This guide starts from a fresh clone and runs the Flask site locally.
 
-   python3 -m venv .venv
-   . .venv/bin/activate
+## 1. Create a Virtual Environment
 
-2. Install dependencies:
+```bash
+python3 -m venv .venv
+```
 
-   pip install -r requirements.txt
+## 2. Activate the Virtual Environment
 
-3. Create a local environment file for email settings:
+```bash
+. .venv/bin/activate
+```
 
-   cp .env.example .env
+## 3. Install Python Dependencies
 
-4. Fill in the values in .env:
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-   MAIL_SERVER=smtp.example.com
-   MAIL_PORT=587
-   MAIL_USERNAME=me@example.com
-   MAIL_PASSWORD=your_app_password
-   MAIL_USE_TLS=1
-   MAIL_USE_SSL=0
-   MAIL_DEFAULT_SENDER=me@example.com
-   MAIL_RECIPIENT=me@example.com
+## 4. Create Local Environment File
 
-5. Run the site:
+```bash
+cp .env.example .env
+```
 
-   python main.py
+`.env` is ignored by git. Put local secrets there, never in tracked files.
 
-Then open http://127.0.0.1:5000.
+## 5. Configure Proton SMTP
 
-Notes
-- .env is ignored by git and must not contain values meant to be committed.
-- .env.example contains placeholders only and is safe to commit.
-- Existing system environment variables take priority over .env values.
-- If email variables are missing, the contact form stays available but shows a friendly delivery error.
+For local contact-form testing, edit `.env`:
+
+```bash
+MAIL_SERVER=smtp.protonmail.ch
+MAIL_PORT=587
+MAIL_USERNAME=contact@eliashauksson.com
+MAIL_PASSWORD=your_proton_smtp_token
+MAIL_USE_TLS=1
+MAIL_USE_SSL=0
+MAIL_DEFAULT_SENDER=contact@eliashauksson.com
+MAIL_RECIPIENT=contact@eliashauksson.com
+```
+
+Notes:
+- `MAIL_PASSWORD` must be a Proton SMTP token, not the Proton account password.
+- Generate SMTP tokens in Proton Mail settings for `contact@eliashauksson.com`.
+- Existing shell environment variables win over `.env`; the loader never overwrites them.
+- Without valid mail settings, the site still runs and the contact form shows a friendly send error.
+
+## 6. Run Locally
+
+```bash
+python main.py
+```
+
+Open:
+
+```text
+http://127.0.0.1:5000
+```
+
+Useful local routes:
+
+```text
+/home
+/about
+/contact
+/de/home
+/de/about
+/de/contact
+```
+
+## 7. Test the Contact Form
+
+1. Start the app with `python main.py`.
+2. Open `http://127.0.0.1:5000/contact`.
+3. Submit a test message.
+4. Check the inbox for `contact@eliashauksson.com`.
+5. If sending fails, check the terminal output for server-side mail logs.
+
+The browser should never show raw SMTP exceptions.

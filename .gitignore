@@ -3,3 +3,6 @@ __pycache__/
 .venv/
 .idea/
 .env
+.env.*
+!.env.example
+*.log

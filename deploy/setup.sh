@@ -65,14 +65,15 @@ FLASK_ENV=production
 PYTHONUNBUFFERED=1
 
 # Mail settings (fill in to enable contact form)
-#MAIL_SERVER=smtp.gmail.com
-#MAIL_PORT=587
-#MAIL_USERNAME=your_username
+# Proton SMTP submission: generate a token in Proton Mail settings.
+MAIL_SERVER=smtp.protonmail.ch
+MAIL_PORT=587
+#MAIL_USERNAME=contact@eliashauksson.com
 #MAIL_PASSWORD=your_password
-#MAIL_USE_TLS=1
-#MAIL_USE_SSL=0
-#MAIL_DEFAULT_SENDER=me@example.com
-#MAIL_RECIPIENT=me@example.com
+MAIL_USE_TLS=1
+MAIL_USE_SSL=0
+#MAIL_DEFAULT_SENDER=contact@eliashauksson.com
+#MAIL_RECIPIENT=contact@eliashauksson.com
 EOF
   mv /tmp/${APP_NAME}.env "$ENV_FILE"
   chown root:root "$ENV_FILE"
@@ -113,11 +114,15 @@ if [[ "$SETUP_NGINX" -eq 1 ]]; then
     echo "No domain provided. You can pass --domain example.com to set server_name. Using _ as default."
     DOMAIN="_"
   fi
+  SERVER_NAMES="$DOMAIN"
+  if [[ "$DOMAIN" != "_" && "$DOMAIN" != www.* ]]; then
+    SERVER_NAMES="$DOMAIN www.$DOMAIN"
+  fi
   NGINX_SITE_PATH="/etc/nginx/sites-available/${APP_NAME}.conf"
   cat >"$NGINX_SITE_PATH" <<EOF
 server {
     listen 80;
-    server_name ${DOMAIN};
+    server_name ${SERVER_NAMES};
 
     # Max upload size (if needed for forms)
     client_max_body_size 10M;
