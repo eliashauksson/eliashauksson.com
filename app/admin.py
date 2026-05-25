@@ -43,9 +43,11 @@ SECTIONS = {
 }
 ALLOWED_MEDIA_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "gif"}
 FILENAME_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*\.md$")
+MEDIA_FILENAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*\.(?:jpg|jpeg|png|webp|gif)$")
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 TRUE_VALUES = {"1", "true", "yes", "on"}
+MEDIA_SECTIONS = ("projects", "logbook")
 
 
 @bp.before_request
@@ -200,10 +202,13 @@ def delete_logbook(filename):
 @bp.route("/media")
 @login_required
 def media():
+    media_query = clean_search_query(request.args.get("q", ""))
+    media_files = list_media_files(query=media_query)
     return render_template(
         "admin/media.html",
+        media_query=media_query,
         uploaded_path=request.args.get("uploaded_path", ""),
-        media_files=list_media_files(),
+        media_groups=group_media_files(media_files),
         max_upload_mb=MAX_UPLOAD_BYTES // (1024 * 1024),
     )
 
@@ -215,7 +220,7 @@ def upload_media():
     slug = request.form.get("slug", "")
     file = request.files.get("file")
 
-    if section not in SECTIONS:
+    if section not in MEDIA_SECTIONS:
         flash("Choose a valid media section.", "error")
         return redirect(url_for("admin.media"))
     if not validate_slug(slug):
@@ -238,7 +243,83 @@ def upload_media():
 
     uploaded_path = f"/static/img/{section}/{slug}/{final_filename}"
     flash("Image uploaded.", "success")
-    return redirect(url_for("admin.media", uploaded_path=uploaded_path))
+    return redirect(
+        url_for(
+            "admin.media",
+            q=f"{section}/{slug}",
+            uploaded_path=uploaded_path,
+        )
+    )
+
+
+@bp.route("/media/rename", methods=["POST"])
+@login_required
+def rename_media():
+    section = request.form.get("section", "")
+    slug = request.form.get("slug", "")
+    old_filename = (request.form.get("old_filename", "") or "").strip()
+    new_filename = (request.form.get("new_filename", "") or "").strip()
+    redirect_url = media_redirect(section, slug)
+
+    source, error = checked_media_path(section, slug, old_filename)
+    if error:
+        flash(error, "error")
+        return redirect(redirect_url)
+
+    target, error = checked_media_path(section, slug, new_filename, must_exist=False)
+    if error:
+        flash(error, "error")
+        return redirect(redirect_url)
+    if source == target:
+        flash("Choose a different filename.", "error")
+        return redirect(redirect_url)
+    if target.exists():
+        flash("An image with that filename already exists.", "error")
+        return redirect(redirect_url)
+
+    try:
+        source.rename(target)
+    except OSError as exc:
+        current_app.logger.warning("Could not rename media file %s: %s", source, exc)
+        flash("Could not rename image.", "error")
+        return redirect(redirect_url)
+
+    flash("Image renamed.", "success")
+    return redirect(
+        url_for(
+            "admin.media",
+            q=f"{section}/{slug}",
+            uploaded_path=public_media_path(section, slug, target.name),
+        )
+    )
+
+
+@bp.route("/media/delete", methods=["POST"])
+@login_required
+def delete_media():
+    section = request.form.get("section", "")
+    slug = request.form.get("slug", "")
+    filename = (request.form.get("filename", "") or "").strip()
+    redirect_url = media_redirect(section, slug)
+
+    source, error = checked_media_path(section, slug, filename)
+    if error:
+        flash(error, "error")
+        return redirect(redirect_url)
+
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S%f")
+    trash = media_trash_dir(section, slug)
+    destination = trash / f"{timestamp}-{source.name}"
+    try:
+        trash.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(source), str(destination))
+    except OSError as exc:
+        current_app.logger.warning("Could not move media file %s to trash: %s", source, exc)
+        flash("Could not move image to trash.", "error")
+        return redirect(redirect_url)
+
+    flash("Image moved to trash.", "success")
+    return redirect(redirect_url)
 
 
 def render_admin_list(section: str):
@@ -264,45 +345,25 @@ def edit_content(section: str, filename: str | None = None):
         preview_html = render_markdown(entry["body"])
 
         if request.form.get("action") == "preview":
-            return render_template(
-                "admin/edit.html",
-                section=section,
-                section_config=SECTIONS[section],
-                entry=entry,
-                filename=filename,
-                is_new=is_new,
-                errors=errors,
-                preview_html=preview_html,
-            )
+            return render_edit_template(section, entry, filename, is_new, errors, preview_html)
 
         if errors:
             for error in errors:
                 flash(error, "error")
-            return render_template(
-                "admin/edit.html",
-                section=section,
-                section_config=SECTIONS[section],
-                entry=entry,
-                filename=filename,
-                is_new=is_new,
-                errors=errors,
-                preview_html=preview_html,
-            )
+            return render_edit_template(section, entry, filename, is_new, errors, preview_html)
 
         if is_new:
             target_filename = generated_filename(entry)
             target_path = content_path(section, target_filename, must_exist=False)
             if target_path.exists():
                 flash("A file with that generated filename already exists.", "error")
-                return render_template(
-                    "admin/edit.html",
-                    section=section,
-                    section_config=SECTIONS[section],
-                    entry=entry,
-                    filename=target_filename,
-                    is_new=is_new,
-                    errors=[],
-                    preview_html=preview_html,
+                return render_edit_template(
+                    section,
+                    entry,
+                    target_filename,
+                    is_new,
+                    [],
+                    preview_html,
                 )
             filename = target_filename
         else:
@@ -313,6 +374,19 @@ def edit_content(section: str, filename: str | None = None):
         flash("Content saved.", "success")
         return redirect(url_for(f"admin.{section}"))
 
+    return render_edit_template(section, entry, filename, is_new, [], "")
+
+
+def render_edit_template(
+    section: str,
+    entry: dict,
+    filename: str | None,
+    is_new: bool,
+    errors: list[str],
+    preview_html: str,
+):
+    media_query = clean_search_query(request.args.get("media_q", ""))
+    media_files = list_media_files(query=media_query)
     return render_template(
         "admin/edit.html",
         section=section,
@@ -320,8 +394,10 @@ def edit_content(section: str, filename: str | None = None):
         entry=entry,
         filename=filename,
         is_new=is_new,
-        errors=[],
-        preview_html="",
+        errors=errors,
+        preview_html=preview_html,
+        media_query=media_query,
+        media_files=media_files,
     )
 
 
@@ -523,32 +599,127 @@ def media_dir(section: str, slug: str) -> Path:
     return project_root() / "static" / "img" / section / slug
 
 
+def media_trash_dir(section: str, slug: str) -> Path:
+    return project_root() / "static" / "img" / ".trash" / section / slug
+
+
 def project_root() -> Path:
     return Path(current_app.root_path).parent
 
 
-def list_media_files() -> list[dict]:
+def list_media_files(query: str = "") -> list[dict]:
     root = project_root() / "static" / "img"
     files = []
-    for section in SECTIONS:
+    for section in MEDIA_SECTIONS:
         section_root = root / section
         if not section_root.is_dir():
             continue
-        for path in sorted(section_root.glob("*/*")):
-            if path.is_file() and allowed_media_filename(path.name):
-                files.append(
-                    {
+        for slug_dir in sorted(path for path in section_root.iterdir() if path.is_dir()):
+            slug = slug_dir.name
+            if not validate_slug(slug):
+                continue
+            for path in sorted(slug_dir.iterdir()):
+                if path.is_file() and validate_media_filename(path.name):
+                    public_path = public_media_path(section, slug, path.name)
+                    media_file = {
                         "name": path.name,
-                        "path": f"/static/img/{section}/{path.parent.name}/{path.name}",
+                        "path": public_path,
                         "section": section,
-                        "slug": path.parent.name,
+                        "slug": slug,
+                        "folder": f"{section}/{slug}",
+                        "markdown": f"![alt text]({public_path})",
                     }
-                )
+                    if media_matches_query(media_file, query):
+                        files.append(media_file)
     return files
+
+
+def group_media_files(files: list[dict]) -> list[dict]:
+    groups = []
+    current_group = None
+    for media_file in files:
+        key = (media_file["section"], media_file["slug"])
+        if not current_group or current_group["key"] != key:
+            current_group = {
+                "key": key,
+                "section": media_file["section"],
+                "slug": media_file["slug"],
+                "files": [],
+            }
+            groups.append(current_group)
+        current_group["files"].append(media_file)
+    return groups
+
+
+def media_matches_query(media_file: dict, query: str) -> bool:
+    if not query:
+        return True
+    needle = query.lower()
+    searchable = " ".join(
+        [
+            media_file["name"],
+            media_file["slug"],
+            media_file["section"],
+            media_file["folder"],
+            media_file["path"],
+        ]
+    ).lower()
+    return needle in searchable
+
+
+def clean_search_query(value: str) -> str:
+    return clean_line(value)[:100]
+
+
+def public_media_path(section: str, slug: str, filename: str) -> str:
+    return f"/static/img/{section}/{slug}/{filename}"
+
+
+def checked_media_path(
+    section: str,
+    slug: str,
+    filename: str,
+    must_exist: bool = True,
+) -> tuple[Path | None, str | None]:
+    filename = (filename or "").strip()
+    if section not in MEDIA_SECTIONS:
+        return None, "Choose a valid media section."
+    if not validate_slug(slug):
+        return None, "Use a lowercase slug with letters, numbers, and hyphens only."
+    if not validate_media_filename(filename):
+        return None, "Use a safe image filename with an allowed extension."
+
+    directory = media_dir(section, slug)
+    joined = safe_join(str(directory), filename)
+    if not joined:
+        return None, "Use a safe image filename with an allowed extension."
+    path = Path(joined).resolve()
+    if path.parent != directory.resolve():
+        return None, "Use a safe image filename with an allowed extension."
+    if must_exist and not path.is_file():
+        return None, "Image not found."
+    if not must_exist and path.exists() and not path.is_file():
+        return None, "An item with that filename already exists."
+    return path, None
+
+
+def media_redirect(section: str = "", slug: str = ""):
+    if section in MEDIA_SECTIONS and validate_slug(slug):
+        return url_for("admin.media", q=f"{section}/{slug}")
+    return url_for("admin.media")
 
 
 def allowed_media_filename(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_MEDIA_EXTENSIONS
+
+
+def validate_media_filename(filename: str) -> bool:
+    filename = (filename or "").strip()
+    return (
+        bool(MEDIA_FILENAME_RE.fullmatch(filename))
+        and secure_filename(filename) == filename
+        and allowed_media_filename(filename)
+    )
 
 
 def unique_filename(directory: Path, filename: str) -> str:

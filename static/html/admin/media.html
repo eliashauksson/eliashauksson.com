@@ -7,7 +7,7 @@
   <header class="admin-header">
     <a class="content-back" href="{{ url_for('admin.dashboard') }}">Admin</a>
     <h1>Media</h1>
-    <p>Upload images for projects and logbook entries.</p>
+    <p>Upload, find, rename, and remove project and logbook images.</p>
   </header>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -21,9 +21,16 @@
   {% endwith %}
 
   {% if uploaded_path %}
-  <div class="admin-panel">
-    <label for="uploaded_path">Uploaded path</label>
-    <input id="uploaded_path" readonly value="{{ uploaded_path }}">
+  <div class="admin-panel admin-uploaded-media">
+    <img src="{{ uploaded_path }}" alt="" loading="lazy">
+    <div class="admin-field">
+      <label for="uploaded_path">Uploaded path</label>
+      <input id="uploaded_path" readonly value="{{ uploaded_path }}">
+    </div>
+    <div class="admin-field">
+      <label for="uploaded_markdown">Markdown</label>
+      <input id="uploaded_markdown" readonly value="![alt text]({{ uploaded_path }})">
+    </div>
   </div>
   {% endif %}
 
@@ -51,18 +58,61 @@
   </form>
 
   <section class="admin-panel">
-    <div class="admin-panel__header">
+    <div class="admin-panel__header admin-panel__header--split">
       <h2>Existing media</h2>
+      <form class="admin-search" method="get" action="{{ url_for('admin.media') }}">
+        <label for="media-search">Search</label>
+        <input id="media-search" name="q" value="{{ media_query }}" placeholder="filename, slug, section, or path">
+        <button class="admin-secondary-button" type="submit">Search</button>
+        {% if media_query %}
+        <a class="admin-link-button" href="{{ url_for('admin.media') }}">Clear</a>
+        {% endif %}
+      </form>
     </div>
-    {% if media_files %}
-    <ul class="admin-media-list">
-      {% for file in media_files %}
-      <li>
-        <a href="{{ file.path }}">{{ file.path }}</a>
-        <span>{{ file.section }} / {{ file.slug }}</span>
-      </li>
+
+    {% if media_groups %}
+    <div class="admin-media-groups">
+      {% for group in media_groups %}
+      <section class="admin-media-group">
+        <h3>{{ group.section }}/{{ group.slug }}</h3>
+        <div class="admin-media-grid">
+          {% for file in group.files %}
+          <article class="admin-media-card">
+            <a class="admin-media-thumb" href="{{ file.path }}">
+              <img src="{{ file.path }}" alt="" loading="lazy">
+            </a>
+            <div class="admin-media-meta">
+              <strong>{{ file.name }}</strong>
+              <a href="{{ file.path }}">{{ file.path }}</a>
+            </div>
+            <div class="admin-field">
+              <label for="markdown-{{ group.section }}-{{ loop.index }}-{{ group.slug }}">Markdown</label>
+              <input id="markdown-{{ group.section }}-{{ loop.index }}-{{ group.slug }}" readonly value="{{ file.markdown }}">
+            </div>
+            <form class="admin-media-action" method="post" action="{{ url_for('admin.rename_media') }}">
+              <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+              <input type="hidden" name="section" value="{{ file.section }}">
+              <input type="hidden" name="slug" value="{{ file.slug }}">
+              <input type="hidden" name="old_filename" value="{{ file.name }}">
+              <label for="rename-{{ group.section }}-{{ loop.index }}-{{ group.slug }}">Rename</label>
+              <div class="admin-media-action__row">
+                <input id="rename-{{ group.section }}-{{ loop.index }}-{{ group.slug }}" name="new_filename" value="{{ file.name }}" required>
+                <button class="admin-secondary-button" type="submit">Rename</button>
+              </div>
+            </form>
+            <form method="post" action="{{ url_for('admin.delete_media') }}">
+              <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+              <input type="hidden" name="section" value="{{ file.section }}">
+              <input type="hidden" name="slug" value="{{ file.slug }}">
+              <input type="hidden" name="filename" value="{{ file.name }}">
+              <button class="admin-danger-button" type="submit">Move to trash</button>
+            </form>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
       {% endfor %}
-    </ul>
+    </div>
     {% else %}
     <p class="admin-empty">No uploaded project or logbook media found.</p>
     {% endif %}
