@@ -1,3 +1,4 @@
 Flask>=2.2,<3.0
+Flask-Limiter>=3.8,<4.0
 # WSGI server
 gunicorn>=21.2,<22.0

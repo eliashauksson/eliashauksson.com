@@ -63,6 +63,8 @@ if [[ ! -f "$ENV_FILE" ]]; then
 # Flask environment
 FLASK_ENV=production
 PYTHONUNBUFFERED=1
+# Generate with: python3 -c "import secrets; print(secrets.token_urlsafe(32))"
+#SECRET_KEY=
 
 # Mail settings (fill in to enable contact form)
 # Proton SMTP submission: generate a token in Proton Mail settings.

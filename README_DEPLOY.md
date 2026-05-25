@@ -54,6 +54,8 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+`requirements.txt` includes `Flask-Limiter`, which provides the contact-form rate limits.
+
 Alternative one-shot setup:
 
 ```bash
@@ -81,6 +83,7 @@ Recommended contents:
 ```bash
 FLASK_ENV=production
 PYTHONUNBUFFERED=1
+SECRET_KEY=replace_with_a_random_secret
 
 MAIL_SERVER=smtp.protonmail.ch
 MAIL_PORT=587
@@ -94,6 +97,7 @@ MAIL_RECIPIENT=contact@eliashauksson.com
 
 Variable meanings:
 
+- `SECRET_KEY`: Flask session signing key, required for contact-form timing protection. Generate one with `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`.
 - `MAIL_SERVER`: Proton SMTP submission host.
 - `MAIL_PORT`: SMTP submission port. Proton uses `587` with STARTTLS.
 - `MAIL_USERNAME`: Proton custom-domain email address paired with the SMTP token.
@@ -259,6 +263,13 @@ curl -I https://eliashauksson.com/de/home
 curl -I https://eliashauksson.com/contact
 ```
 
+Contact anti-spam:
+
+- Global rate limits: `200/day` and `50/hour` per IP.
+- Contact POST limits: `5/hour` and `2/minute` per IP.
+- Blocks use the generic contact send-error message; the response does not reveal whether timing, rate limiting, honeypots, disposable email, or structural checks triggered.
+- Spam events are written to `logs/spam.log` in the app directory with timestamp, IP, reason, and email address only. Message bodies are not logged.
+
 ## 9. Troubleshooting
 
 Mail:
@@ -287,8 +298,9 @@ Gunicorn/systemd:
 Permissions:
 
 - App files should be readable by the service user.
+- The service user needs write access to `logs/spam.log` in the app directory.
 - `/etc/eliashaukssoncom.env` should be `root:root` and `600`.
-- The service does not need write access to the repository.
+- Other repository files do not need service write access.
 
 DNS:
 

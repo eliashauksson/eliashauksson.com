@@ -21,6 +21,8 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
+The contact form uses `Flask-Limiter` for lightweight self-hosted rate limiting.
+
 ## 4. Create Local Environment File
 
 ```bash
@@ -28,6 +30,11 @@ cp .env.example .env
 ```
 
 `.env` is ignored by git. Put local secrets there, never in tracked files.
+Set `SECRET_KEY` to keep Flask contact-form sessions stable across restarts:
+
+```bash
+SECRET_KEY=replace_with_a_random_local_secret
+```
 
 ## 5. Configure Proton SMTP
 
@@ -82,3 +89,9 @@ Useful local routes:
 5. If sending fails, check the terminal output for server-side mail logs.
 
 The browser should never show raw SMTP exceptions.
+
+Anti-spam behavior:
+- Global rate limits: `200/day` and `50/hour` per IP.
+- Contact POST limits: `5/hour` and `2/minute` per IP.
+- Very fast submissions, hidden trap fields, obvious disposable email domains, and conservative structural message checks are rejected with the generic send-error message.
+- Spam events are logged to `logs/spam.log` with timestamp, IP, reason, and email address only. Message bodies are not logged.

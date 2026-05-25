@@ -19,11 +19,11 @@
   "contact_message": "Message",
   "contact_button": "Send message",
   
-  "contact_spam": "Submission flagged as spam.",
+  "contact_spam": "Message could not be sent. Please try again.",
   "contact_required": "Please fill out your name, email, and message.",
   "contact_invalid_email": "Please provide a valid email address.",
   "contact_status": "Your message has been sent. Thank you!",
-  "contact_send_error": "Something went wrong while sending your message.",
+  "contact_send_error": "Message could not be sent. Please try again.",
   
   "projects_title": "Projects",
   

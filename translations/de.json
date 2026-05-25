@@ -19,11 +19,11 @@
   "contact_message": "Nachricht",
   "contact_button": "Nachricht senden",
 
-  "contact_spam": "Die Nachricht wurde als Spam erkannt.",
+  "contact_spam": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.",
   "contact_required": "Bitte fülle Name, E-Mail und Nachricht aus.",
   "contact_invalid_email": "Bitte gib eine gültige E-Mail-Adresse ein.",
   "contact_status": "Deine Nachricht wurde erfolgreich gesendet. Vielen Dank!",
-  "contact_send_error": "Beim Senden der Nachricht ist ein Fehler aufgetreten.",
+  "contact_send_error": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.",
 
   "projects_title": "Projekte",
 
