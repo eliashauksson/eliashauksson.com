@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Media{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <header class="admin-header">
+    <a class="content-back" href="{{ url_for('admin.dashboard') }}">Admin</a>
+    <h1>Media</h1>
+    <p>Upload images for projects and logbook entries.</p>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="admin-flashes">
+    {% for category, message in messages %}
+    <p class="admin-flash admin-flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% if uploaded_path %}
+  <div class="admin-panel">
+    <label for="uploaded_path">Uploaded path</label>
+    <input id="uploaded_path" readonly value="{{ uploaded_path }}">
+  </div>
+  {% endif %}
+
+  <form class="admin-form" method="post" action="{{ url_for('admin.upload_media') }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <div class="admin-grid">
+      <div class="admin-field">
+        <label for="section">Section</label>
+        <select id="section" name="section" required>
+          <option value="projects">Projects</option>
+          <option value="logbook">Logbook</option>
+        </select>
+      </div>
+      <div class="admin-field">
+        <label for="slug">Slug folder</label>
+        <input id="slug" name="slug" pattern="[a-z0-9]+(-[a-z0-9]+)*" required placeholder="dynamo-buffer">
+      </div>
+    </div>
+    <div class="admin-field">
+      <label for="file">Image</label>
+      <input id="file" type="file" name="file" accept=".jpg,.jpeg,.png,.webp,.gif" required>
+      <p class="admin-help">Allowed: jpg, jpeg, png, webp, gif. Max {{ max_upload_mb }} MB.</p>
+    </div>
+    <button class="btn" type="submit">Upload</button>
+  </form>
+
+  <section class="admin-panel">
+    <div class="admin-panel__header">
+      <h2>Existing media</h2>
+    </div>
+    {% if media_files %}
+    <ul class="admin-media-list">
+      {% for file in media_files %}
+      <li>
+        <a href="{{ file.path }}">{{ file.path }}</a>
+        <span>{{ file.section }} / {{ file.slug }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="admin-empty">No uploaded project or logbook media found.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

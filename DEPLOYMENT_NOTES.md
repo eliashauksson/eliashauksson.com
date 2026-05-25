@@ -52,8 +52,21 @@ Never commit:
 
 - `.env`
 - SMTP tokens
+- `SECRET_KEY`
+- `ADMIN_PASSWORD`
 - VPS private keys
 - Proton account credentials
+
+Required production env values for site security:
+
+```bash
+SECRET_KEY=<stable-random-secret>
+ADMIN_PASSWORD=<long-random-password>
+```
+
+`SECRET_KEY` must be stable across restarts. `ADMIN_PASSWORD` should be a long
+random password, ideally 24+ characters. If `ADMIN_PASSWORD` is missing, `/admin`
+is disabled. If `SECRET_KEY` is missing in production, the app will not start.
 
 ## Local Workflow
 
@@ -144,6 +157,15 @@ sudo systemctl reload nginx
 sudo tail -n 100 /var/log/nginx/error.log
 ```
 
+Production Nginx should block template source files before the broader
+`/static/` location:
+
+```nginx
+location ^~ /static/html/ {
+    return 404;
+}
+```
+
 HTTPS:
 
 ```bash
@@ -163,5 +185,5 @@ curl -I https://eliashauksson.com/contact
 
 - Add CSRF protection or a stronger anti-spam mechanism if contact form spam becomes a problem.
 - Add rate limiting at Nginx or Flask level if bots target `/contact`.
-- Move templates out of `static/html` in a future architecture cleanup; they are not secrets, but serving templates from the static tree is unconventional.
+- Move templates out of `static/html` in a future architecture cleanup. Flask and Nginx should block direct `/static/html/` access until then.
 - Keep Proton SMTP/DNS details synced with the current Proton dashboard because provider settings may change.

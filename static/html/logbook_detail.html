@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }}{% endblock %}
+
+{% block content %}
+<article class="content-detail">
+  <header class="content-detail__header">
+    <a class="content-back" href="{{ localized_url('logbook') }}">{{ text.logbook_title }}</a>
+    <h1>{{ entry.title }}</h1>
+    <div class="content-detail__meta">
+      {% if entry.date %}
+      <span>{{ text.published_on }} <time datetime="{{ entry.date_iso }}">{{ entry.date_iso }}</time></span>
+      {% endif %}
+      {% if related_project %}
+      <a href="{{ localized_url('projects', slug=related_project.slug) }}">{{ related_project.title }}</a>
+      {% elif entry.related_project %}
+      <span>{{ entry.related_project }}</span>
+      {% endif %}
+    </div>
+    {% if entry.summary %}
+    <p class="content-detail__summary">{{ entry.summary }}</p>
+    {% endif %}
+    {% if entry.tags %}
+    <ul class="tag-list" aria-label="Tags">
+      {% for tag in entry.tags %}
+      <li>{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  {% if entry.cover_image %}
+  <img class="content-detail__cover" src="{{ entry.cover_image }}" alt="" loading="lazy">
+  {% endif %}
+
+  <div class="markdown-content">
+    {{ entry.html|safe }}
+  </div>
+</article>
+{% endblock %}

@@ -1,6 +1,8 @@
 {
   "nav_home": "Home",
   "nav_about": "About",
+  "nav_projects": "Projects",
+  "nav_logbook": "Logbook",
   "nav_contact": "Contact",
 
   "home_title": "Home",
@@ -26,6 +28,11 @@
   "contact_send_error": "Message could not be sent. Please try again.",
   
   "projects_title": "Projects",
+  "logbook_title": "Logbook",
+  "project_empty": "No projects yet.",
+  "logbook_empty": "No logbook entries yet.",
+  "published_on": "Published",
+  "project_status": "Status",
   
   "error_403_title": "Access denied",
   "error_403_heading": "403 - Access denied",

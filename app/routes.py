@@ -14,6 +14,7 @@ from flask import (
     session,
 )
 
+from .content_loader import get_entry, has_visible_entries, load_entries
 from .disposable_domains import is_disposable_email
 from .extensions import limiter
 from .markdown_utils import render_markdown
@@ -23,7 +24,7 @@ from .translations import DEFAULT_LANG, SUPPORTED_LANGS, get_translations
 
 bp = Blueprint("routes", __name__)
 
-PAGES = {"home", "about", "contact", "projects"}
+PAGES = {"home", "about", "contact", "projects", "logbook"}
 MIN_SECONDS_TO_SUBMIT = 3
 MAX_EMAIL_LENGTH = 254
 MIN_NAME_LENGTH = 2
@@ -41,6 +42,10 @@ def current_lang() -> str:
 
 def current_page() -> str:
     endpoint = request.endpoint.rsplit(".", 1)[-1] if request.endpoint else ""
+    if endpoint == "project_detail":
+        return "projects"
+    if endpoint == "logbook_detail":
+        return "logbook"
     return endpoint if endpoint in PAGES else ""
 
 
@@ -50,15 +55,22 @@ def validate_lang(lang: str) -> str:
     return lang
 
 
-def localized_url(page: str, lang: str | None = None) -> str:
+def localized_url(page: str, lang: str | None = None, slug: str | None = None) -> str:
     lang = validate_lang(lang or current_lang())
     path = "/home" if page == "home" else f"/{page}"
+    if slug and page in {"projects", "logbook"}:
+        path = f"{path}/{slug}"
     return path if lang == DEFAULT_LANG else f"/{lang}{path}"
 
 
 def language_switch_url(lang: str) -> str:
-    page = current_page() or "home"
-    return localized_url(page, lang)
+    endpoint = request.endpoint.rsplit(".", 1)[-1] if request.endpoint else ""
+    slug = (request.view_args or {}).get("slug")
+    if endpoint == "project_detail":
+        return localized_url("projects", lang, slug)
+    if endpoint == "logbook_detail":
+        return localized_url("logbook", lang, slug)
+    return localized_url(current_page() or "home", lang)
 
 
 def load_markdown_content(lang: str, name: str) -> str:
@@ -140,6 +152,8 @@ def inject_language_context():
         "current_page": current_page(),
         "localized_url": localized_url,
         "language_switch_url": language_switch_url,
+        "has_projects": has_visible_entries("projects", lang),
+        "has_logbook": has_visible_entries("logbook", lang),
     }
 
 
@@ -213,5 +227,43 @@ def contact(lang):
 @bp.route("/projects", defaults={"lang": DEFAULT_LANG})
 @bp.route("/de/projects", defaults={"lang": "de"})
 def projects(lang):
-    validate_lang(lang)
-    return render_template("projects.html")
+    lang = validate_lang(lang)
+    project_entries = load_entries("projects", lang)
+    return render_template("projects.html", projects=project_entries)
+
+
+@bp.route("/projects/<slug>", defaults={"lang": DEFAULT_LANG})
+@bp.route("/de/projects/<slug>", defaults={"lang": "de"})
+def project_detail(lang, slug):
+    lang = validate_lang(lang)
+    project = get_entry("projects", slug, lang)
+    if not project:
+        abort(404)
+    return render_template("project_detail.html", project=project)
+
+
+@bp.route("/logbook", defaults={"lang": DEFAULT_LANG})
+@bp.route("/de/logbook", defaults={"lang": "de"})
+def logbook(lang):
+    lang = validate_lang(lang)
+    logbook_entries = load_entries("logbook", lang)
+    return render_template("logbook.html", entries=logbook_entries)
+
+
+@bp.route("/logbook/<slug>", defaults={"lang": DEFAULT_LANG})
+@bp.route("/de/logbook/<slug>", defaults={"lang": "de"})
+def logbook_detail(lang, slug):
+    lang = validate_lang(lang)
+    entry = get_entry("logbook", slug, lang)
+    if not entry:
+        abort(404)
+
+    related_project = None
+    if entry["related_project"]:
+        related_project = get_entry("projects", entry["related_project"], lang)
+
+    return render_template(
+        "logbook_detail.html",
+        entry=entry,
+        related_project=related_project,
+    )

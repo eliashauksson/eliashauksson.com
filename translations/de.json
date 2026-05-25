@@ -1,6 +1,8 @@
 {
   "nav_home": "Start",
   "nav_about": "Über mich",
+  "nav_projects": "Projekte",
+  "nav_logbook": "Logbuch",
   "nav_contact": "Kontakt",
 
   "home_title": "Start",
@@ -26,6 +28,11 @@
   "contact_send_error": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es erneut.",
 
   "projects_title": "Projekte",
+  "logbook_title": "Logbuch",
+  "project_empty": "Noch keine Projekte.",
+  "logbook_empty": "Noch keine Logbucheinträge.",
+  "published_on": "Veröffentlicht",
+  "project_status": "Status",
 
   "error_403_title": "Zugriff verweigert",
   "error_403_heading": "403 – Zugriff verweigert",

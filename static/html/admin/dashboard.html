@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Admin{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <header class="admin-header admin-header--split">
+    <div>
+      <h1>Admin</h1>
+      <p>Manage markdown content and media.</p>
+    </div>
+    <form method="post" action="{{ url_for('admin.logout') }}">
+      <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+      <button class="admin-link-button" type="submit">Sign out</button>
+    </form>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="admin-flashes">
+    {% for category, message in messages %}
+    <p class="admin-flash admin-flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="admin-actions">
+    <a class="btn" href="{{ url_for('admin.new_project') }}">New project</a>
+    <a class="btn" href="{{ url_for('admin.new_logbook') }}">New logbook entry</a>
+    <a class="admin-secondary-button" href="{{ url_for('admin.media') }}">Media manager</a>
+  </div>
+
+  <div class="admin-stats">
+    <a class="admin-stat" href="{{ url_for('admin.projects') }}">
+      <span>Projects</span>
+      <strong>{{ project_count }}</strong>
+    </a>
+    <a class="admin-stat" href="{{ url_for('admin.logbook') }}">
+      <span>Logbook</span>
+      <strong>{{ logbook_count }}</strong>
+    </a>
+  </div>
+
+  <section class="admin-panel">
+    <div class="admin-panel__header">
+      <h2>Latest entries</h2>
+    </div>
+    {% if latest_entries %}
+    <ul class="admin-latest">
+      {% for entry in latest_entries %}
+      <li>
+        <span>{{ entry.section }}</span>
+        <strong>{{ entry.title }}</strong>
+        {% if entry.date_iso %}
+        <time datetime="{{ entry.date_iso }}">{{ entry.date_iso }}</time>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="admin-empty">No visible entries yet.</p>
+    {% endif %}
+  </section>
+</section>
+{% endblock %}

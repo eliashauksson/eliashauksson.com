@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<section class="admin-page admin-page--narrow">
+  <header class="admin-header">
+    <h1>Admin Login</h1>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="admin-flashes">
+    {% for category, message in messages %}
+    <p class="admin-flash admin-flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <form class="admin-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+    <div class="admin-field">
+      <label for="password">Password</label>
+      <input id="password" type="password" name="password" required autocomplete="current-password">
+    </div>
+    <button class="btn" type="submit">Sign in</button>
+  </form>
+</section>
+{% endblock %}

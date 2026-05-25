@@ -58,13 +58,19 @@ sudo -u "$RUN_USER" bash -c "cd '$PROJECT_DIR' && python3 -m venv .venv && . .ve
 
 # 3) Environment file (create if missing)
 if [[ ! -f "$ENV_FILE" ]]; then
+  GENERATED_SECRET_KEY="$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")"
   cat >/tmp/${APP_NAME}.env <<'EOF'
 # Environment variables for the website service
 # Flask environment
 FLASK_ENV=production
 PYTHONUNBUFFERED=1
-# Generate with: python3 -c "import secrets; print(secrets.token_urlsafe(32))"
-#SECRET_KEY=
+EOF
+  cat >>/tmp/${APP_NAME}.env <<EOF
+SECRET_KEY=${GENERATED_SECRET_KEY}
+EOF
+  cat >>/tmp/${APP_NAME}.env <<'EOF'
+# Set this to enable /admin. Use a long random password, ideally 24+ chars.
+#ADMIN_PASSWORD=
 
 # Mail settings (fill in to enable contact form)
 # Proton SMTP submission: generate a token in Proton Mail settings.
@@ -128,6 +134,10 @@ server {
 
     # Max upload size (if needed for forms)
     client_max_body_size 10M;
+
+    location ^~ /static/html/ {
+        return 404;
+    }
 
     location /static/ {
         alias ${PROJECT_DIR}/static/;

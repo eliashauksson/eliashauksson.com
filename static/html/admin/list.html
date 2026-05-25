@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - {{ section_config.label }}{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <header class="admin-header admin-header--split">
+    <div>
+      <a class="content-back" href="{{ url_for('admin.dashboard') }}">Admin</a>
+      <h1>{{ section_config.label }}</h1>
+    </div>
+    <div class="admin-actions admin-actions--compact">
+      {% if section == 'projects' %}
+      <a class="btn" href="{{ url_for('admin.new_project') }}">New project</a>
+      {% else %}
+      <a class="btn" href="{{ url_for('admin.new_logbook') }}">New logbook entry</a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="admin-flashes">
+    {% for category, message in messages %}
+    <p class="admin-flash admin-flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% if entries %}
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Slug</th>
+          <th>Draft</th>
+          <th>Lang</th>
+          <th>Filename</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in entries %}
+        <tr>
+          <td>
+            <strong>{{ entry.title }}</strong>
+            {% if entry.status %}
+            <span class="admin-muted">{{ entry.status }}</span>
+            {% endif %}
+          </td>
+          <td>{{ entry.date }}</td>
+          <td><code>{{ entry.slug }}</code></td>
+          <td>{% if entry.draft %}Yes{% else %}No{% endif %}</td>
+          <td>{{ entry.lang }}</td>
+          <td><code>{{ entry.filename }}</code></td>
+          <td>
+            <div class="admin-row-actions">
+              {% if section == 'projects' %}
+              <a href="{{ url_for('admin.edit_project', filename=entry.filename) }}">Edit</a>
+              <a href="{{ url_for('admin.delete_project', filename=entry.filename) }}">Delete</a>
+              {% else %}
+              <a href="{{ url_for('admin.edit_logbook', filename=entry.filename) }}">Edit</a>
+              <a href="{{ url_for('admin.delete_logbook', filename=entry.filename) }}">Delete</a>
+              {% endif %}
+              {% if entry.public_url %}
+              <a href="{{ entry.public_url }}">Open</a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="admin-empty">No markdown files found.</p>
+  {% endif %}
+</section>
+{% endblock %}

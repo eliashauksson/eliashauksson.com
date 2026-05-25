@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - {% if is_new %}New{% else %}Edit{% endif %} {{ section_config.single }}{% endblock %}
+
+{% block content %}
+<section class="admin-page">
+  <header class="admin-header">
+    {% if section == 'projects' %}
+    <a class="content-back" href="{{ url_for('admin.projects') }}">{{ section_config.label }}</a>
+    {% else %}
+    <a class="content-back" href="{{ url_for('admin.logbook') }}">{{ section_config.label }}</a>
+    {% endif %}
+    <h1>{% if is_new %}New{% else %}Edit{% endif %} {{ section_config.single }}</h1>
+    {% if filename %}
+    <p><code>{{ filename }}</code></p>
+    {% endif %}
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="admin-flashes">
+    {% for category, message in messages %}
+    <p class="admin-flash admin-flash--{{ category }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <form class="admin-form admin-editor" method="post">
+    <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+
+    <div class="admin-grid">
+      <div class="admin-field">
+        <label for="title">Title</label>
+        <input id="title" name="title" value="{{ entry.title }}" required>
+      </div>
+      <div class="admin-field">
+        <label for="slug">Slug{% if section == 'logbook' %} optional{% endif %}</label>
+        <input id="slug" name="slug" value="{{ entry.slug }}" pattern="[a-z0-9]+(-[a-z0-9]+)*">
+      </div>
+      <div class="admin-field">
+        <label for="date">Date</label>
+        <input id="date" type="date" name="date" value="{{ entry.date }}" required>
+      </div>
+      {% if section == 'projects' %}
+      <div class="admin-field">
+        <label for="status">Status</label>
+        <input id="status" name="status" value="{{ entry.status }}">
+      </div>
+      {% else %}
+      <div class="admin-field">
+        <label for="related_project">Related project</label>
+        <input id="related_project" name="related_project" value="{{ entry.related_project }}" pattern="[a-z0-9]+(-[a-z0-9]+)*">
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="admin-field">
+      <label for="summary">Summary</label>
+      <input id="summary" name="summary" value="{{ entry.summary }}">
+    </div>
+
+    <div class="admin-grid">
+      <div class="admin-field">
+        <label for="tags">Tags</label>
+        <input id="tags" name="tags" value="{{ entry.tags }}" placeholder="electronics, bikepacking">
+      </div>
+      <div class="admin-field">
+        <label for="cover_image">Cover image</label>
+        <input id="cover_image" name="cover_image" value="{{ entry.cover_image }}" placeholder="/static/img/projects/slug/image.jpg">
+      </div>
+    </div>
+
+    <label class="admin-checkbox">
+      <input type="checkbox" name="draft" {% if entry.draft %}checked{% endif %}>
+      Draft
+    </label>
+
+    <div class="admin-field">
+      <label for="body">Markdown body</label>
+      <textarea id="body" name="body" rows="22">{{ entry.body }}</textarea>
+    </div>
+
+    <div class="admin-actions">
+      <button class="btn" type="submit" name="action" value="save">Save</button>
+      <button class="admin-secondary-button" type="submit" name="action" value="preview">Preview</button>
+    </div>
+  </form>
+
+  {% if preview_html %}
+  <section class="admin-panel admin-preview">
+    <div class="admin-panel__header">
+      <h2>Preview</h2>
+    </div>
+    <div class="markdown-content">
+      {{ preview_html|safe }}
+    </div>
+  </section>
+  {% endif %}
+</section>
+{% endblock %}

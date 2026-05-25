@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<article class="content-detail">
+  <header class="content-detail__header">
+    <a class="content-back" href="{{ localized_url('projects') }}">{{ text.projects_title }}</a>
+    <h1>{{ project.title }}</h1>
+    <div class="content-detail__meta">
+      {% if project.date %}
+      <span>{{ text.published_on }} <time datetime="{{ project.date_iso }}">{{ project.date_iso }}</time></span>
+      {% endif %}
+      {% if project.status %}
+      <span class="content-detail__status">{{ text.project_status }}: {{ project.status }}</span>
+      {% endif %}
+    </div>
+    {% if project.summary %}
+    <p class="content-detail__summary">{{ project.summary }}</p>
+    {% endif %}
+    {% if project.tags %}
+    <ul class="tag-list" aria-label="Tags">
+      {% for tag in project.tags %}
+      <li>{{ tag }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  {% if project.cover_image %}
+  <img class="content-detail__cover" src="{{ project.cover_image }}" alt="" loading="lazy">
+  {% endif %}
+
+  <div class="markdown-content">
+    {{ project.html|safe }}
+  </div>
+</article>
+{% endblock %}

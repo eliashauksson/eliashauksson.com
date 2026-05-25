@@ -84,6 +84,7 @@ Recommended contents:
 FLASK_ENV=production
 PYTHONUNBUFFERED=1
 SECRET_KEY=replace_with_a_random_secret
+ADMIN_PASSWORD=replace_with_a_long_random_admin_password
 
 MAIL_SERVER=smtp.protonmail.ch
 MAIL_PORT=587
@@ -97,7 +98,8 @@ MAIL_RECIPIENT=contact@eliashauksson.com
 
 Variable meanings:
 
-- `SECRET_KEY`: Flask session signing key, required for contact-form timing protection. Generate one with `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`.
+- `SECRET_KEY`: Stable Flask session signing key, required in production for contact-form timing protection, admin sessions, and CSRF tokens. Generate one with `python3 -c "import secrets; print(secrets.token_urlsafe(32))"`.
+- `ADMIN_PASSWORD`: Enables `/admin`. Use a long random password, ideally 24+ characters. If missing, `/admin` returns `404`.
 - `MAIL_SERVER`: Proton SMTP submission host.
 - `MAIL_PORT`: SMTP submission port. Proton uses `587` with STARTTLS.
 - `MAIL_USERNAME`: Proton custom-domain email address paired with the SMTP token.
@@ -198,6 +200,10 @@ server {
 
     client_max_body_size 10M;
 
+    location ^~ /static/html/ {
+        return 404;
+    }
+
     location /static/ {
         alias /var/www/eliashaukssoncom/static/;
         expires 30d;
@@ -269,6 +275,16 @@ Contact anti-spam:
 - Contact POST limits: `5/hour` and `2/minute` per IP.
 - Blocks use the generic contact send-error message; the response does not reveal whether timing, rate limiting, honeypots, disposable email, or structural checks triggered.
 - Spam events are written to `logs/spam.log` in the app directory with timestamp, IP, reason, and email address only. Message bodies are not logged.
+
+Admin security:
+
+- Production requires a stable `SECRET_KEY`; the app refuses to start without one.
+- `/admin` is enabled only when `ADMIN_PASSWORD` is set.
+- Use `/admin` only over HTTPS.
+- `/admin/login` is rate-limited.
+- Admin uploads allow `jpg`, `jpeg`, `png`, `webp`, and `gif`; SVG is intentionally disabled.
+- Deleted markdown files are moved to `content/.trash/`.
+- Block `/static/html/` in Nginx so template source files are not served directly.
 
 ## 9. Troubleshooting
 

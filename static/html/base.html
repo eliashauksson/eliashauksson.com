@@ -16,6 +16,12 @@
     <ul class="nav-right">
       <li><a href="{{ localized_url('home') }}" class="{% if current_page == 'home' %}active{% endif %}">{{ text.nav_home }}</a></li>
       <li><a href="{{ localized_url('about') }}" class="{% if current_page == 'about' %}active{% endif %}">{{ text.nav_about }}</a></li>
+      {% if has_projects %}
+      <li><a href="{{ localized_url('projects') }}" class="{% if current_page == 'projects' %}active{% endif %}">{{ text.nav_projects }}</a></li>
+      {% endif %}
+      {% if has_logbook %}
+      <li><a href="{{ localized_url('logbook') }}" class="{% if current_page == 'logbook' %}active{% endif %}">{{ text.nav_logbook }}</a></li>
+      {% endif %}
       <li><a href="{{ localized_url('contact') }}" class="{% if current_page == 'contact' %}active{% endif %}">{{ text.nav_contact }}</a></li>
       <li class="language-switcher" aria-label="Language">
         <a href="{{ language_switch_url('en') }}" class="{% if lang == 'en' %}active{% endif %}" hreflang="en">EN</a>

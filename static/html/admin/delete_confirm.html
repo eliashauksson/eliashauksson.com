@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Delete {{ section_config.single }}{% endblock %}
+
+{% block content %}
+<section class="admin-page admin-page--narrow">
+  <header class="admin-header">
+    {% if section == 'projects' %}
+    <a class="content-back" href="{{ url_for('admin.projects') }}">{{ section_config.label }}</a>
+    {% else %}
+    <a class="content-back" href="{{ url_for('admin.logbook') }}">{{ section_config.label }}</a>
+    {% endif %}
+    <h1>Delete {{ section_config.single }}</h1>
+  </header>
+
+  <div class="admin-panel">
+    <p>Move this file to trash?</p>
+    <p><strong>{{ entry.title }}</strong></p>
+    <p><code>{{ filename }}</code></p>
+
+    <form class="admin-actions" method="post">
+      <input type="hidden" name="csrf_token" value="{{ admin_csrf_token() }}">
+      <button class="admin-danger-button" type="submit">Move to trash</button>
+      {% if section == 'projects' %}
+      <a class="admin-secondary-button" href="{{ url_for('admin.projects') }}">Cancel</a>
+      {% else %}
+      <a class="admin-secondary-button" href="{{ url_for('admin.logbook') }}">Cancel</a>
+      {% endif %}
+    </form>
+  </div>
+</section>
+{% endblock %}

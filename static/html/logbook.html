@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}{{ text.logbook_title }}{% endblock %}
+
+{% block content %}
+<section class="content-index">
+  <header class="content-index__header">
+    <h1>{{ text.logbook_title }}</h1>
+  </header>
+
+  {% if entries %}
+  <div class="entry-list">
+    {% for entry in entries %}
+    <a class="entry-card {% if entry.cover_image %}entry-card--with-image{% else %}entry-card--no-image{% endif %}" href="{{ localized_url('logbook', slug=entry.slug) }}">
+      {% if entry.cover_image %}
+      <img class="entry-card__image" src="{{ entry.cover_image }}" alt="" loading="lazy">
+      {% endif %}
+      <div class="entry-card__body">
+        <div class="entry-card__meta">
+          {% if entry.date %}
+          <time class="entry-card__date" datetime="{{ entry.date_iso }}">{{ entry.date_iso }}</time>
+          {% endif %}
+          {% if entry.related_project %}
+          <span class="entry-card__status">{{ entry.related_project }}</span>
+          {% endif %}
+        </div>
+        <h2 class="entry-card__title">{{ entry.title }}</h2>
+        {% if entry.summary %}
+        <p class="entry-card__summary">{{ entry.summary }}</p>
+        {% endif %}
+        {% if entry.tags %}
+        <ul class="tag-list" aria-label="Tags">
+          {% for tag in entry.tags %}
+          <li>{{ tag }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-state">{{ text.logbook_empty }}</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Dynamo buffer placeholder diagram</title>
+  <desc id="desc">A simple placeholder diagram showing a hub dynamo, buffer battery, and regulated output.</desc>
+  <rect width="1200" height="700" fill="#f9fafb"/>
+  <rect x="60" y="60" width="1080" height="580" rx="18" fill="#ffffff" stroke="#e5e7eb" stroke-width="4"/>
+  <g fill="none" stroke="#1f2937" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="210" cy="350" r="90"/>
+    <circle cx="210" cy="350" r="18"/>
+    <path d="M210 260v180M120 350h180M146 286l128 128M274 286L146 414"/>
+    <path d="M330 350h120"/>
+    <path d="M450 270h210v160H450z"/>
+    <path d="M500 315h110M500 350h110M500 385h70"/>
+    <path d="M660 350h110"/>
+    <path d="M770 285h180v130H770z"/>
+    <path d="M805 350h110"/>
+    <path d="M950 350h95"/>
+    <path d="M1045 315h35v70h-35z"/>
+  </g>
+  <g fill="#1f2937" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="210" y="500" font-size="34" font-weight="700">Hub Dynamo</text>
+    <text x="555" y="500" font-size="34" font-weight="700">Buffer Stage</text>
+    <text x="875" y="500" font-size="34" font-weight="700">5 V Output</text>
+  </g>
+  <g fill="#6b7280" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="600" y="150" font-size="28">Placeholder system diagram</text>
+  </g>
+</svg>
