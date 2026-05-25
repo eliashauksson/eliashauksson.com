@@ -13,7 +13,13 @@
       <a href="{{ localized_url('home') }}">Elías Hauksson</a>
     </div>
 
-    <ul class="nav-right">
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav-links">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+
+    <ul class="nav-right" id="site-nav-links">
       <li><a href="{{ localized_url('home') }}" class="{% if current_page == 'home' %}active{% endif %}">{{ text.nav_home }}</a></li>
       <li><a href="{{ localized_url('about') }}" class="{% if current_page == 'about' %}active{% endif %}">{{ text.nav_about }}</a></li>
       {% if has_projects %}
@@ -34,6 +40,7 @@
 <main class="container">
 {% block content %}{% endblock %}
 </main>
+<script src="{{ url_for('static', filename='js/nav.js') }}" defer></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
