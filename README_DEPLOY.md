@@ -251,11 +251,27 @@ sudo certbot renew --dry-run
 
 ## 8. Deployment Update Procedure
 
+Preferred one-command update from the live server checkout:
+
+```bash
+chmod +x deploy/update_live.sh
+./deploy/update_live.sh
+```
+
+The helper refuses to run with uncommitted local changes, pulls `origin master`,
+uses `.venv` when present, installs requirements, validates Python and
+translation files, restarts `eliashaukssoncom`, and prints status/log output.
+
+Manual equivalent:
+
 ```bash
 cd /var/www/eliashaukssoncom
-git pull
+git pull origin master
 . .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
+python -m compileall app
+python -m json.tool translations/en.json > /dev/null
+python -m json.tool translations/de.json > /dev/null
 sudo systemctl restart eliashaukssoncom.service
 sudo systemctl status eliashaukssoncom.service
 journalctl -u eliashaukssoncom.service -n 100 --no-pager
