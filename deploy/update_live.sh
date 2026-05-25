@@ -16,6 +16,27 @@ run() {
   "$@"
 }
 
+is_allowed_live_path() {
+  case "$1" in
+    content/*|static/img/*)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+add_dirty_path() {
+  local path="$1"
+
+  if is_allowed_live_path "$path"; then
+    allowed_dirty_paths+=("$path")
+  else
+    blocked_dirty_paths+=("$path")
+  fi
+}
+
 section "Project"
 cd "$PROJECT_ROOT"
 printf 'Project root: %s\n' "$PROJECT_ROOT"
@@ -36,15 +57,52 @@ if [[ "$current_branch" != "$TARGET_BRANCH" ]]; then
   exit 1
 fi
 
-if [[ -n "$(git status --porcelain)" ]]; then
-  echo "Error: refusing to deploy with uncommitted local changes:" >&2
-  git status --short >&2
+allowed_dirty_paths=()
+blocked_dirty_paths=()
+while IFS= read -r status_line; do
+  [[ -z "$status_line" ]] && continue
+  dirty_path="${status_line:3}"
+
+  if [[ "$dirty_path" == *" -> "* ]]; then
+    add_dirty_path "${dirty_path%% -> *}"
+    add_dirty_path "${dirty_path##* -> }"
+  else
+    add_dirty_path "$dirty_path"
+  fi
+done < <(git status --porcelain)
+
+if [[ "${#blocked_dirty_paths[@]}" -gt 0 ]]; then
+  echo "Error: refusing to deploy with uncommitted code/config/template changes:" >&2
+  printf '  %s\n' "${blocked_dirty_paths[@]}" >&2
+  echo "Only local changes under content/ and static/img/ are allowed during deploy." >&2
   exit 1
 fi
 
+if [[ "${#allowed_dirty_paths[@]}" -gt 0 ]]; then
+  echo "Live content/media changes detected:"
+  printf '  %s\n' "${allowed_dirty_paths[@]}"
+  echo "These changes will be preserved. They will not be discarded, committed, or stashed."
+else
+  echo "Live content/media changes detected: none"
+fi
+
 section "Pull"
-run git pull origin "$TARGET_BRANCH"
+printf '+ git pull --ff-only origin %s\n' "$TARGET_BRANCH"
+if ! git pull --ff-only origin "$TARGET_BRANCH"; then
+  cat >&2 <<'MSG'
+Error: git pull failed.
+
+Local live content/media changes were preserved. If the pull conflicts with
+admin-created content or media, resolve it manually on the server, then rerun
+this script. No merge conflicts were auto-resolved.
+MSG
+  exit 1
+fi
 printf 'Latest commit: %s\n' "$(git log -1 --oneline)"
+if [[ "${#allowed_dirty_paths[@]}" -gt 0 ]]; then
+  echo "Preserved live content/media changes:"
+  printf '  %s\n' "${allowed_dirty_paths[@]}"
+fi
 
 section "Python Environment"
 if [[ -f ".venv/bin/activate" ]]; then

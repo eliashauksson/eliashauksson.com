@@ -258,15 +258,25 @@ chmod +x deploy/update_live.sh
 ./deploy/update_live.sh
 ```
 
-The helper refuses to run with uncommitted local changes, pulls `origin master`,
-uses `.venv` when present, installs requirements, validates Python and
-translation files, restarts `eliashaukssoncom`, and prints status/log output.
+The helper allows live admin-created changes under `content/` and `static/img/`,
+then pulls `origin master`, uses `.venv` when present, installs requirements,
+validates Python and translation files, restarts `eliashaukssoncom`, and prints
+status/log output.
+
+Code, template, CSS, JS, dependency, deployment, translation, README, and docs
+changes made directly on the server still block deployment. The script lists
+those unsafe paths and exits before pulling.
+
+Content and media changes created through `/admin` are preserved locally. They
+are not discarded, committed, stashed, or pushed automatically. If an upstream
+pull would overwrite or conflict with those files, Git stops the deploy and the
+server needs manual conflict resolution before rerunning the script.
 
 Manual equivalent:
 
 ```bash
 cd /var/www/eliashaukssoncom
-git pull origin master
+git pull --ff-only origin master
 . .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m compileall app
