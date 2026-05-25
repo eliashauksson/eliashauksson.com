@@ -359,13 +359,16 @@ body {
   gap: 24px;
   max-width: 720px;
   margin: 0 auto;
+  min-width: 0;
 }
 
 .form-row { display: grid; gap: 8px; margin-bottom: 14px; }
 .form-row label { font-weight: 600; letter-spacing: 0.2px; }
 .form-row input,
 .form-row textarea {
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
