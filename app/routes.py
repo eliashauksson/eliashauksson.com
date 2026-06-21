@@ -1,8 +1,8 @@
 import math
-import os
 import re
 import time
 from collections import Counter
+from pathlib import Path
 
 from flask import (
     Blueprint,
@@ -74,14 +74,12 @@ def language_switch_url(lang: str) -> str:
 
 
 def load_markdown_content(lang: str, name: str) -> str:
-    content_dir = os.path.join(current_app.static_folder, "content")
-    path = os.path.join(content_dir, lang, name)
-    fallback_path = os.path.join(content_dir, DEFAULT_LANG, name)
+    content_dir = Path(current_app.static_folder) / "content"
+    candidates = (content_dir / lang / name, content_dir / DEFAULT_LANG / name)
 
-    for candidate in (path, fallback_path):
+    for candidate in candidates:
         try:
-            with open(candidate, "r", encoding="utf-8") as f:
-                return render_markdown(f.read())
+            return render_markdown(candidate.read_text(encoding="utf-8"))
         except FileNotFoundError:
             continue
     return ""
@@ -202,7 +200,6 @@ def contact(lang):
         form["email"] = (request.form.get("email") or "").strip()
         form["message"] = (request.form.get("message") or "").strip()
 
-        # basic validation
         if hidden_trap_triggered():
             error = block_contact_submission("honeypot", form["email"], t)
         elif not form["name"] or not form["email"] or not form["message"]:

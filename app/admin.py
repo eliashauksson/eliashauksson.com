@@ -334,7 +334,7 @@ def render_admin_list(section: str):
 
 def edit_content(section: str, filename: str | None = None):
     is_new = filename is None
-    entry = empty_form(section)
+    entry = empty_form()
 
     if not is_new:
         entry = load_admin_file(section, filename)
@@ -408,9 +408,14 @@ def delete_content(section: str, filename: str):
         source = content_path(section, filename)
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S%f")
         trash = trash_dir(section)
-        trash.mkdir(parents=True, exist_ok=True)
         destination = trash / f"{timestamp}-{filename}"
-        shutil.move(str(source), destination)
+        try:
+            trash.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(source), str(destination))
+        except OSError as exc:
+            current_app.logger.warning("Could not move content file %s to trash: %s", source, exc)
+            flash("Could not move content to trash.", "error")
+            return redirect(url_for(f"admin.{section}"))
         flash("Content moved to trash.", "success")
         return redirect(url_for(f"admin.{section}"))
 
@@ -465,7 +470,7 @@ def load_admin_file(section: str, filename: str) -> dict:
         abort(404)
 
     metadata, body = _parse_frontmatter(raw)
-    entry = empty_form(section)
+    entry = empty_form()
     entry.update(
         {
             "title": metadata.get("title", ""),
@@ -498,7 +503,7 @@ def form_to_entry(section: str) -> dict:
     }
 
 
-def empty_form(section: str) -> dict:
+def empty_form() -> dict:
     today = date.today().isoformat()
     return {
         "title": "",
@@ -743,9 +748,9 @@ def validate_slug(slug: str) -> bool:
 def valid_date(value: str) -> bool:
     try:
         date.fromisoformat(value)
+        return True
     except ValueError:
         return False
-    return True
 
 
 def slugify(value: str) -> str:

@@ -2,7 +2,6 @@ import logging
 import os
 import smtplib
 from email.message import EmailMessage
-from typing import Tuple
 
 logger = logging.getLogger(__name__)
 SMTP_TIMEOUT_SECONDS = 15
@@ -20,21 +19,7 @@ def _bool(val: str | None, default: bool = False) -> bool:
     return val.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def send_contact_message(name: str, email: str, message: str) -> Tuple[bool, str]:
-    """
-    Send a contact form email using SMTP settings from environment variables.
-
-    Required env vars (typical):
-      - MAIL_SERVER (e.g., smtp.gmail.com)
-      - MAIL_PORT (e.g., 587)
-      - MAIL_USERNAME
-      - MAIL_PASSWORD
-      - MAIL_USE_TLS (1) or MAIL_USE_SSL (0/1)
-      - MAIL_DEFAULT_SENDER (fallback: MAIL_USERNAME)
-      - MAIL_RECIPIENT (where to deliver; fallback: MAIL_USERNAME)
-
-    Returns (ok, error_message). error_message is empty on success.
-    """
+def send_contact_message(name: str, email: str, message: str) -> tuple[bool, str]:
     server = os.getenv("MAIL_SERVER")
     port_raw = os.getenv("MAIL_PORT", "0") or 0
     username = os.getenv("MAIL_USERNAME")

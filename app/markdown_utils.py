@@ -8,19 +8,6 @@ ALLOWED_IMAGE_SCHEMES = {"", "http", "https"}
 
 
 def render_markdown(md: str) -> str:
-    """
-    Very small markdown-to-HTML renderer to avoid external deps.
-    Supports:
-      - Headings: #, ##, ### → h1..h3
-      - Unordered lists: lines starting with -, *
-      - Images: ![alt](url)
-      - Fenced code blocks: ``` or ```language
-      - Paragraphs: separated by blank lines
-      - Inline: **bold**, *italic*, [text](url)
-      - Line breaks: two spaces at EOL → <br>
-    This is intentionally minimal — good for simple content blocks.
-    """
-    # Normalize line endings
     md = md.replace("\r\n", "\n").replace("\r", "\n")
 
     html_lines = []
@@ -46,7 +33,6 @@ def render_markdown(md: str) -> str:
         code_language = ""
         code_lines = []
 
-    # Inline replacements
     def inline(txt: str) -> str:
         txt = html.escape(txt)
 
@@ -71,11 +57,9 @@ def render_markdown(md: str) -> str:
 
         txt = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", image, txt)
         txt = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, txt)
-        # Bold **text**
         txt = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", txt)
-        # Italic *text*
         txt = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", txt)
-        # Line break on two spaces before newline handled later
+        # two trailing spaces → <br> is handled in flush_paragraph
         return txt
 
     current_para = []
@@ -83,7 +67,6 @@ def render_markdown(md: str) -> str:
     def flush_paragraph():
         nonlocal current_para
         if current_para:
-            # Join lines with space; keep hard line breaks when two spaces at EOL
             joined = []
             for i, ln in enumerate(current_para):
                 if ln.endswith("  "):
@@ -114,12 +97,10 @@ def render_markdown(md: str) -> str:
             continue
 
         if not line.strip():
-            # blank line ends paragraph or list
             flush_paragraph()
             close_list()
             continue
 
-        # Headings
         if line.startswith("### "):
             flush_paragraph(); close_list()
             html_lines.append(f"<h3>{inline(line[4:])}</h3>")
@@ -133,7 +114,6 @@ def render_markdown(md: str) -> str:
             html_lines.append(f"<h1>{inline(line[2:])}</h1>")
             continue
 
-        # Unordered list
         if line.lstrip().startswith(("- ", "* ")):
             flush_paragraph()
             if not in_list:
@@ -143,10 +123,8 @@ def render_markdown(md: str) -> str:
             html_lines.append(f"<li>{inline(item)}</li>")
             continue
 
-        # Otherwise, part of a paragraph
         current_para.append(line)
 
-    # Close any open structures
     flush_paragraph()
     close_list()
     close_code()

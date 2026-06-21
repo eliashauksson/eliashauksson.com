@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 from flask import Flask, abort, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -6,17 +8,11 @@ from .env import load_local_env
 
 
 def create_app() -> Flask:
-    """
-    Application factory. Creates the Flask app, configures template/static folders,
-    registers blueprints and error handlers.
-    """
-    # Determine absolute paths for templates and static relative to this file
-    here = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.abspath(os.path.join(here, ".."))
+    project_root = Path(__file__).parent.parent
     load_local_env(project_root)
 
-    templates_path = os.path.join(project_root, "static", "html")
-    static_path = os.path.join(project_root, "static")
+    templates_path = project_root / "static" / "html"
+    static_path = project_root / "static"
 
     app = Flask(__name__, template_folder=templates_path, static_folder=static_path)
     is_production = is_production_env()
@@ -69,14 +65,12 @@ def create_app() -> Flask:
     limiter.init_app(app)
     configure_spam_logger(project_root)
 
-    # Register routes
     from .routes import bp as routes_bp
     app.register_blueprint(routes_bp)
 
     from .admin import bp as admin_bp
     app.register_blueprint(admin_bp)
 
-    # Register error handlers
     from .errors import register_error_handlers
     register_error_handlers(app)
 
