@@ -5,36 +5,20 @@
 {% block content %}
 <article class="content-detail">
   <header class="content-detail__header">
-    <a class="content-back" href="{{ localized_url('logbook') }}">{{ text.logbook_title }}</a>
-    <h1>{{ entry.title }}</h1>
+    <a class="content-back" href="{{ localized_url('logbook') }}">← {{ text.logbook_title }}</a>
     <div class="content-detail__meta">
-      {% if entry.date %}
-      <span>{{ text.published_on }} <time datetime="{{ entry.date_iso }}">{{ entry.date_iso }}</time></span>
-      {% endif %}
+      {% if entry.date %}<span>{{ text.published_on }} {{ entry.date_iso }}</span>{% endif %}
       {% if related_project %}
-      <a href="{{ localized_url('projects', slug=related_project.slug) }}">{{ related_project.title }}</a>
+      <a href="{{ localized_url('projects', slug=related_project.slug) }}" class="content-detail__status">[ {{ related_project.title }} ]</a>
       {% elif entry.related_project %}
-      <span>{{ entry.related_project }}</span>
+      <span class="content-detail__status">[ {{ entry.related_project }} ]</span>
       {% endif %}
     </div>
-    {% if entry.summary %}
-    <p class="content-detail__summary">{{ entry.summary }}</p>
-    {% endif %}
-    {% if entry.tags %}
-    <ul class="tag-list" aria-label="Tags">
-      {% for tag in entry.tags %}
-      <li>{{ tag }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
+    <h1>{{ entry.title }}</h1>
+    {% if entry.summary %}<p class="content-detail__summary">{{ entry.summary }}</p>{% endif %}
+    {% if entry.tags %}<div class="tag-list">{% for tag in entry.tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>{% endif %}
   </header>
 
-  {% if entry.cover_image %}
-  <img class="content-detail__cover" src="{{ entry.cover_image }}" alt="" loading="lazy">
-  {% endif %}
-
-  <div class="markdown-content">
-    {{ entry.html|safe }}
-  </div>
+  <div class="markdown-content">{{ entry.html|safe }}</div>
 </article>
 {% endblock %}

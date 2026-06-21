@@ -9,7 +9,8 @@
   </header>
 
   <div class="about-page__content">
-    {{ about_content|safe }}
+    <div class="about-page__label">Profile</div>
+    <div class="about-page__body">{{ about_content|safe }}</div>
   </div>
 </section>
 {% endblock %}

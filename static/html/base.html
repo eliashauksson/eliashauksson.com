@@ -10,7 +10,8 @@
 <nav class="navbar">
   <div class="navbar-inner">
     <div class="logo">
-      <a href="{{ localized_url('home') }}">Elías Hauksson</a>
+      <a href="{{ localized_url('home') }}">Hauksson</a>
+      <span class="logo__tag">EE · CH</span>
     </div>
 
     <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav-links">
@@ -42,5 +43,13 @@
 </main>
 <script src="{{ url_for('static', filename='js/nav.js') }}" defer></script>
 {% block scripts %}{% endblock %}
+{% if current_page != 'home' %}
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span>© 2026 Elías Hauksson</span>
+    <span>eliashauksson.com</span>
+  </div>
+</footer>
+{% endif %}
 </body>
 </html>

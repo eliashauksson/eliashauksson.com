@@ -6,35 +6,24 @@
 <section class="content-index">
   <header class="content-index__header">
     <h1>{{ text.projects_title }}</h1>
+    <span class="content-index__count">[ {{ '%02d'|format(projects|length) }} ]</span>
   </header>
 
   {% if projects %}
   <div class="entry-list">
     {% for project in projects %}
-    <a class="entry-card {% if project.cover_image %}entry-card--with-image{% else %}entry-card--no-image{% endif %}" href="{{ localized_url('projects', slug=project.slug) }}">
-      {% if project.cover_image %}
-      <img class="entry-card__image" src="{{ project.cover_image }}" alt="" loading="lazy">
-      {% endif %}
-      <div class="entry-card__body">
-        <div class="entry-card__meta">
-          {% if project.date %}
-          <time class="entry-card__date" datetime="{{ project.date_iso }}">{{ project.date_iso }}</time>
-          {% endif %}
-          {% if project.status %}
-          <span class="entry-card__status">{{ project.status }}</span>
-          {% endif %}
+    <a class="entry" href="{{ localized_url('projects', slug=project.slug) }}">
+      <span class="entry__num">{{ '%02d'|format(loop.index) }}</span>
+      <div class="entry__body">
+        <h2 class="entry__title">{{ project.title }}</h2>
+        {% if project.summary %}<p class="entry__summary">{{ project.summary }}</p>{% endif %}
+        <div class="entry__meta">
+          {% if project.status %}<span class="entry__status">[ {{ project.status }} ]</span>{% endif %}
+          {% if project.date %}<time datetime="{{ project.date_iso }}">{{ project.date_iso }}</time>{% endif %}
+          {% if project.tags %}<span class="tag-list">
+            {% for tag in project.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+          </span>{% endif %}
         </div>
-        <h2 class="entry-card__title">{{ project.title }}</h2>
-        {% if project.summary %}
-        <p class="entry-card__summary">{{ project.summary }}</p>
-        {% endif %}
-        {% if project.tags %}
-        <ul class="tag-list" aria-label="Tags">
-          {% for tag in project.tags %}
-          <li>{{ tag }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
       </div>
     </a>
     {% endfor %}

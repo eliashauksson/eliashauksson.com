@@ -3,11 +3,19 @@
 {% block title %}{{ text.home_title }}{% endblock %}
 
 {% block content %}
-<div class="home-hero">
+<section class="home-hero">
   <div class="home-hero__overlay"></div>
+
+  <div class="home-hero__coords">
+    <span>46.55°N / 8.07°E</span>
+    <span>05:14 · ALT 3180 M</span>
+  </div>
+
   <div class="home-hero__content">
+    <div class="home-hero__eyebrow">— Fieschergletscher, before sunrise</div>
     <p class="intro">{{ text.home_intro }}</p>
   </div>
+
   <div class="home-hero__caption">{{ text.home_caption }}</div>
-</div>
+</section>
 {% endblock %}
